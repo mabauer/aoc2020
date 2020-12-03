@@ -10,17 +10,17 @@ def find_entries_for_2020(expenses):
                 return (expenses[i], expenses[j])
             j = j + 1
         i = i + 1
-         
-# Example
+
+# Example data
 input1 = [1721, 979, 366, 299, 675, 1456]
 (first, second) = find_entries_for_2020(input1)
 print("The example result is %d * %d = %d" % (first, second, first*second))
 
-# Solution
+# Official data
 with open("input01.txt") as f:
     input2 = [int(x) for x in f]
 
 (first, second) = find_entries_for_2020(input2)
-print("The answer is: %d" % (first*second))
+print("The answer on official data is: %d" % (first*second))
 
 
