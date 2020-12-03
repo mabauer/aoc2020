@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from functools import reduce
+
 # Count trees encountered in the map when applying a trajectory with parameters right, down 
 def count_trees(map, right, down):
     count = 0
@@ -20,10 +22,8 @@ def count_trees(map, right, down):
 # Apply different strategies and multiply the results
 def part_two(map, strategies):
     results = [ count_trees(map, right, down) for (right, down) in trajectory_strategies]
-
-    result = 1
-    for r in results:
-        result = result * r
+    multiply = lambda x, y: x * y
+    result = reduce(multiply, results)
     return result
 
 # Predefined trajectory strategies for part two
