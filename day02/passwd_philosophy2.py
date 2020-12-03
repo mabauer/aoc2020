@@ -21,31 +21,27 @@ def is_valid_passwd_entry(line):
     letter = mo.group(3)
     passwd = mo.group(4)
     return is_valid_passwd(passwd, letter, first, second)
-            
-# Example
+
+# Count the number of valid passwords
+def count_valid_passwds(input):
+    result = 0
+    for line in input:
+        if is_valid_passwd_entry(line):
+            # print("%s -- valid" % (line))
+            result = result + 1
+        # else:
+        #   print("%s -- invalid" % (line))
+    return result
+
+
+# Example data
 input1 = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]
 
-result = 0
-for line in input1:
-    if is_valid_passwd_entry(line):
-        print("%s -- valid" % (line))
-        result = result + 1
-    else:
-        print("%s -- invalid" % (line))
-print("The example has %d valid passwords" % (result))
+print("The example data has %d valid passwords" % (count_valid_passwds(input1)))
 
-# Solution
+# Official data
 with open("input02.txt") as f:
     input2 = [x.strip() for x in f]
 
-result = 0
-for line in input2:
-    if is_valid_passwd_entry(line):
-        print("%s -- valid" % (line))
-        result = result + 1
-    else:
-        print("%s -- invalid" % (line))
-print("The input has %d valid passwords" % (result))
-
-
+print("The official data has %d valid passwords" % (count_valid_passwds(input2)))
 
