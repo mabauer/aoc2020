@@ -26,6 +26,11 @@ class Day04Test(unittest.TestCase):
         self.assertTrue(day04.is_valid_pid("000000001"))
         self.assertFalse(day04.is_valid_pid("0123456789"))
 
+    def test_validate_hgt2(self):
+        self.assertTrue(day04.is_valid_hgt2("60in"))
+        self.assertTrue(day04.is_valid_hgt2("190cm"))
+        self.assertFalse(day04.is_valid_hgt2("190"))
+
     def test_part1_on_example_data(self):
         input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example04.txt"
         with open(input_file) as f:

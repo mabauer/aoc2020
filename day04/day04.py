@@ -30,6 +30,23 @@ def is_valid_hgt(s):
             return False
         return True
     except ValueError:
+        return False
+
+# Alternative implementation using regex
+def is_valid_hgt2(s):
+    mo = re.search("(\d+)(in|cm)", s)
+    if not mo:
+        return False
+    hgt = mo.group(1) 
+    unit = mo.group(2)
+    try:
+        value = int(hgt)
+        if unit == "cm" and (value < 150 or value > 193):
+            return False
+        if unit == "in" and (value < 59 or value > 76):
+            return False
+        return True
+    except ValueError:
         return False    
 
 # Is hair color valid (6 digit hex code)?
