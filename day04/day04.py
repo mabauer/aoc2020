@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import re
+import os
+import sys
 
 # Is year based field valid (within min..max)?
 def is_valid_year(year, min, max):
@@ -79,7 +81,7 @@ def count_passports(input, skip_partii_checks):
     passport = {}
     for line in input:
         # Empty line: new passport values starts, we can validate the old ones
-        if line == "":
+        if line == "": 
             # print(passport)
             if is_passport_valid(passport, skip_partii_checks):
                 count = count + 1
@@ -95,38 +97,16 @@ def count_passports(input, skip_partii_checks):
             count = count + 1
     return count
 
-def run_tests():
-    assert is_valid_year("2002", 1920, 2002)
-    assert not is_valid_year("2003", 1920, 2002)
+def main():    
 
-    assert is_valid_hgt("60in")
-    assert is_valid_hgt("190cm")
-    assert not is_valid_hgt("190")
-    
-    assert is_valid_hcl("#123abc")
-    assert not is_valid_hcl("#123abz")
-    assert not is_valid_hcl("123abc")
-    
-    assert is_valid_ecl("brn")
-    assert not is_valid_ecl("wat")
+    # Official input
+    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input04.txt"
+    with open(input_file) as f:
+        input = [x.strip() for x in f]
 
-    assert is_valid_pid("000000001")
-    assert not is_valid_pid("0123456789")
+    print("The solution for part 1 on the official input is %d" % (count_passports(input, True)))
+    print("The solution for part 2 on the official input is %d" % (count_passports(input, False)))
 
-run_tests()
-
-# Example data
-with open("example04.txt") as f:
-    input1 = [x.strip() for x in f]
-
-# Official input
-with open("input04.txt") as f:
-    input2 = [x.strip() for x in f]
-
-print("The solution for part 1 on the example data is %d" % (count_passports(input1, True)))
-print("The solution for part 1 on the official input is %d" % (count_passports(input2, True)))
-
-print("The solution for part 2 on the example data is %d" % (count_passports(input1, False)))
-print("The solution for part 2 on the official data is %d" % (count_passports(input2, False)))
-
+if __name__ == "__main__": 
+    main()
 
