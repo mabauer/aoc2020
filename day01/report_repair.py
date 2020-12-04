@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+
 # Find two integers in a list that sum up to 2020
 def find_entries_for_2020(expenses):
     i = 0
@@ -11,16 +13,20 @@ def find_entries_for_2020(expenses):
             j = j + 1
         i = i + 1
 
-# Example data
-input1 = [1721, 979, 366, 299, 675, 1456]
-(first, second) = find_entries_for_2020(input1)
-print("The example result is %d * %d = %d" % (first, second, first*second))
+def main():
+    # Example data
+    input1 = [1721, 979, 366, 299, 675, 1456]
+    (first, second) = find_entries_for_2020(input1)
+    print("The example result is %d * %d = %d" % (first, second, first*second))
 
-# Official data
-with open("input01.txt") as f:
-    input2 = [int(x) for x in f]
+    # Official data
+    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input01.txt"
+    with open(input_file) as f:
+        input2 = [int(x) for x in f]
 
-(first, second) = find_entries_for_2020(input2)
-print("The answer on official data is: %d" % (first*second))
+    (first, second) = find_entries_for_2020(input2)
+    print("The answer on official data is: %d" % (first*second))
 
+if __name__ == "__main__": 
+    main()
 

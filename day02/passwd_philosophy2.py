@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import re
+import os
 
 # Is this password a valid one?
 def is_valid_passwd(passwd, letter, first, second):
@@ -33,15 +34,18 @@ def count_valid_passwds(input):
         #   print("%s -- invalid" % (line))
     return result
 
+def main():
+    # Example data
+    input1 = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]
 
-# Example data
-input1 = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]
+    print("The example data has %d valid passwords" % (count_valid_passwds(input1)))
 
-print("The example data has %d valid passwords" % (count_valid_passwds(input1)))
+    # Official data
+    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input02.txt"
+    with open(input_file) as f:
+        input2 = [x.strip() for x in f]
 
-# Official data
-with open("input02.txt") as f:
-    input2 = [x.strip() for x in f]
+    print("The official data has %d valid passwords" % (count_valid_passwds(input2)))
 
-print("The official data has %d valid passwords" % (count_valid_passwds(input2)))
-
+if __name__ == "__main__": 
+    main()
