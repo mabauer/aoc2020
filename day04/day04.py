@@ -92,16 +92,15 @@ def is_passport_valid(passport, skip_partii_checks=True):
         and is_valid_ecl(passport["ecl"])
         and is_valid_pid(passport["pid"]))
 
-# Count valid passports
-def count_passports(input, skip_partii_checks):
+# Parse passports into a list of passports, each passport is represented as a dictionary
+def parse_passports(input):
     count = 0
+    passports = []
     passport = {}
     for line in input:
         # Empty line: new passport values starts, we can validate the old ones
         if line == "": 
-            # print(passport)
-            if is_passport_valid(passport, skip_partii_checks):
-                count = count + 1
+            passports.append(passport)
             passport = {}
         items = line.split()
         for item in items:
@@ -110,6 +109,14 @@ def count_passports(input, skip_partii_checks):
             passport[key_value[0]] = key_value[1]
     # Don't forget the last one if the input does not end with an empty line
     if line != "":
+        passports.append(passport)
+    return passports
+
+# Count valid passports
+def count_passports(input, skip_partii_checks):
+    count = 0
+    passports = parse_passports(input)
+    for passport in passports:
         if is_passport_valid(passport, skip_partii_checks):
             count = count + 1
     return count

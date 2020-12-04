@@ -31,6 +31,12 @@ class Day04Test(unittest.TestCase):
         self.assertTrue(day04.is_valid_hgt2("190cm"))
         self.assertFalse(day04.is_valid_hgt2("190"))
 
+    def test_parse_passports(self):
+        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example04.txt"
+        with open(input_file) as f:
+            input = [x.strip() for x in f]
+        self.assertEqual(len(day04.parse_passports(input)), 4)
+
     def test_part1_on_example_data(self):
         input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example04.txt"
         with open(input_file) as f:
