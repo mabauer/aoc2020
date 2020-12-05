@@ -42,24 +42,22 @@ def compute_seatid(seat):
     (row, col) = seat
     return row * 8 + col
 
-# Find the highest seat id
-def compute05(input):
-    max = 0
-    for line in input:
-        seat = compute_seat(line)
-        id = compute_seatid(seat)
-        if id > max:
-            max = id
-    return max
-
-# Find our seat
-def compute05b(input):
+# Compute all seats
+def compute_all_seatids(input):
     seats = []
     for line in input:
         seat = compute_seat(line)
         id = compute_seatid(seat)
         seats.append(id)
+    return seats
 
+# Find the highest seat id
+def compute05(input):
+    seats = compute_all_seatids(input)
+    return max(seats)
+
+# Find our seat
+def find_our_seat(seats):
     seats.sort()
     i = 1
     while i < len(seats):
@@ -70,12 +68,37 @@ def compute05b(input):
         i = i + 1
     return 0
 
+def compute05b(input):
+    seats = compute_all_seatids(input)
+    return find_our_seat(seats)
+
+# Print the cabin layout (including missing seats)
+def print_cabin_layout(input):
+    seats = compute_all_seatids(input)
+    my_seat = find_our_seat(seats)
+    i = 0
+    for row in range(0, 128):
+        print("%3d: " % row, end ='')
+        for col in range(0,8):
+            id = row*8 + col
+            if id == my_seat:
+                print("X ", end='')
+            else:
+                if id in seats:
+                    print("# ", end='')
+                else:
+                    print(". ", end='')     
+        print()
+    print()
+
 def main():    
 
     # Official input
     input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input05.txt"
     with open(input_file) as f:
         input = [x.strip() for x in f]
+
+    print_cabin_layout(input)
 
     print("The solution for part 1 (highest seat id) is %d" % (compute05(input)))
     print("The solution for part 2 (our seat id) is %d" % (compute05b(input)))
