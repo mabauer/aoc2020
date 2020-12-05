@@ -94,7 +94,6 @@ def is_passport_valid(passport, skip_partii_checks=True):
 
 # Parse passports into a list of passports, each passport is represented as a dictionary
 def parse_passports(input):
-    count = 0
     passports = []
     passport = {}
     for line in input:
