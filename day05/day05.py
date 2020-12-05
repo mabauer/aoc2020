@@ -37,6 +37,14 @@ def compute_seat(code):
     col = lower
     return (row, col)
 
+# Much better solution: treat code as binary numbers
+def compute_seat2(code):
+    code = code.replace("F", "0").replace("B", "1").replace("L", "0").replace("R", "1")
+    print(code)
+    row = int(code[0:7], 2)
+    col = int(code[7:10], 2)
+    return (row, col)
+
 # Compute the seat id for a seat given by (row, col)
 def compute_seatid(seat):
     (row, col) = seat

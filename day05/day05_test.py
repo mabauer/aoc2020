@@ -12,11 +12,16 @@ class Day05Test(unittest.TestCase):
         self.assertEqual(day05.bisect(0, 63), 31)
         self.assertEqual(day05.bisect(32, 63), 47)
 
-
     def test_compute_seat(self):
         self.assertEqual(day05.compute_seat("BFFFBBFRRR"), (70, 7))
         self.assertEqual(day05.compute_seat("FFFBBBFRRR"), (14, 7))
         self.assertEqual(day05.compute_seat("BBFFBBFRLL"), (102, 4))
+
+    def test_compute_seat2(self):
+        self.assertEqual(day05.compute_seat2("BFFFBBFRRR"), (70, 7))
+        self.assertEqual(day05.compute_seat2("FFFBBBFRRR"), (14, 7))
+        self.assertEqual(day05.compute_seat2("BBFFBBFRLL"), (102, 4))
+
 
     def test_compute05(self):
         input = ["BFFFBBFRRR", "FFFBBBFRRR", "BBFFBBFRLL"]
