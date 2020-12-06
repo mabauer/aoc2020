@@ -7,12 +7,13 @@ import sys
 class Group:
 
     def __init__(self): 
-        self.persons = 0
+        self.number_of_persons = 0
+        # Dictionary: answer -> counter, how often this answer was given
         self.answers = {}
 
     # Adds a new person with their answers (e.g. "abcx")
     def add_person(self, answers):
-        self.persons += 1
+        self.number_of_persons += 1
         i = 0
         while i < len(answers):
             answer = answers[i]
@@ -34,14 +35,14 @@ class Group:
     def answers_by_everyone(self):
         result = [];
         for answer in self.answers.keys():
-            if self.answers[answer] == self.persons:
+            if self.answers[answer] == self.number_of_persons:
                 result.append(answer)
         return result
 
     # For debugging
     def __repr__(self):
         str = "({persons}) {answers}" 
-        return str.format(persons=self.persons, answers=self.answers)
+        return str.format(persons=self.number_of_persons, answers=self.answers)
 
 def parse_groups(input):
     groups = []
