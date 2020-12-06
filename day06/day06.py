@@ -4,37 +4,77 @@ import re
 import os
 import sys
 
+class Group:
+
+    def __init__(self): 
+        self.persons = 0
+        self.answers = {}
+
+    # Adds a new person with their answers (e.g. "abcx")
+    def add_person(self, answers):
+        self.persons += 1
+        i = 0
+        while i < len(answers):
+            answer = answers[i]
+            if answer >= 'a' and answer <='z':
+                self.add_answer(answer)
+            i = i + 1
+
+    def add_answer(self, answer):
+        if answer in self.answers:
+            self.answers[answer] += 1
+        else:
+            self.answers[answer] = 1
+
+    # Return a list of answers that are given by *anyone*
+    def answers_by_anyone(self):
+        return self.answers.keys()
+
+    # Return a list of answers that are given by *everyone*
+    def answers_by_everyone(self):
+        result = [];
+        for answer in self.answers.keys():
+            if self.answers[answer] == self.persons:
+                result.append(answer)
+        return result
+
+    # For debugging
+    def __repr__(self):
+        str = "({persons}) {answers}" 
+        return str.format(persons=self.persons, answers=self.answers)
+
 def parse_groups(input):
     groups = []
-    answers = {}
+    group = Group()
     for line in input:
         if line == "":
-            groups.append(answers)
-            answers = {}
-        i = 0
-        while i < len(line):
-            if line[i] >= 'a' and line[i] <='z':
-                if line[i] in answers:
-                    answers[line[i]] =  answers[line[i]] + 1
-                else:
-                    answers[line[i]] = 1
-            i = i + 1
+            # Empy line => new group
+            groups.append(group)
+            group = Group()
+        else:
+            # => new person
+            group.add_person(line)
     if line != "":
-        groups.append(answers)
+        groups.append(group)
     return groups 
 
-
+# Count the questions to which anyone in a group answered with "yes"
 def compute06(input):
     groups = parse_groups(input)
     # print(groups)
     sum = 0
     for group in groups:
-        sum = sum + len(group)
+        sum = sum + len(group.answers_by_anyone())
     return sum
 
+# Count the questions to which everyone in a group answered with "yes"
 def compute06b(input):
-    result = 0
-    return result
+    groups = parse_groups(input)
+    # print(groups)
+    sum = 0
+    for group in groups:
+        sum = sum + len(group.answers_by_everyone())
+    return sum
 
 def main():    
 
