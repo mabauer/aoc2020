@@ -12,7 +12,7 @@ class Day06Test(unittest.TestCase):
         input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example06.txt"
         with open(input_file) as f:
             input = [x.strip() for x in f]
-        self.assertEqual(day06.compute06(input), 0)
+        self.assertEqual(day06.compute06(input), 11)
 
     def test_compute06b(self):
         input = [""]
