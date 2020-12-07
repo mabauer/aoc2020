@@ -23,7 +23,6 @@ class Day07Test(unittest.TestCase):
             input = [x.strip() for x in f]
         graph = day07.build_graph_part2(input)
         # print(graph)
-        graph = day07.build_graph_part2(input)
         self.assertEqual(graph.accumulate_weights("shinygold")-1, 32)
 
     def test_compute07b(self):

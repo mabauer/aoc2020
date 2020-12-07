@@ -9,28 +9,50 @@ class DirectedGraph:
     def __init__(self):
         self.nodes = {}
 
+    def add_node(self, node):
+        if node not in self.nodes:
+            self.nodes[node] = {}
+
     def add_edge(self, node1, node2, weight=0):
-        if node1 in self.nodes:
-            self.nodes[node1].append((node2, weight))
+        self.add_node(node1)
+        self.add_node(node2)
+        self.nodes[node1][node2] = weight
+
+    def get_weight(self, node1, node2):
+        if node1 in self.nodes and node2 in self.nodes[node1]:
+            return self.nodes[node1][node2]
         else:
-            self.nodes[node1] = [(node2, weight)]
+            return None
+
+    def get_all_nodes(self):
+        return [node for node in self.nodes] 
+
+    def get_all_edges(self):
+        result = []
+        for node in self.get_all_nodes():
+            result += [(node, neighbour, self.get_weight(node, neighbour)) for neighbour in self.get_neighbours(node)]
+        return result
+
+    def get_neighbours(self, node):
+        return [node for node in self.nodes[node]]
 
     def find_all_reachable_nodes(self, node, visited=set()):
         if not node in self.nodes:
             return visited
-        for next in [ neighbour for (neighbour, weight) in self.nodes[node]]:
+        for next in self.get_neighbours(node):
             if not next in visited: 
                 visited.add(next)
                 visited.union(self.find_all_reachable_nodes(next, visited))
         return visited
 
-    def accumulate_weights(self, node):
+    def accumulate_weights(self, node):   
         if not node in self.nodes:
-            return 1
-        sum = 1
-        for (neighbour, weight) in self.nodes[node]:
-            sum = sum + weight * self.accumulate_weights(neighbour)
-        return sum
+            return 0
+        result = 1
+        for neighbour in self.get_neighbours(node):
+            weight = self.get_weight(node, neighbour)
+            result = result + weight * self.accumulate_weights(neighbour)
+        return result
 
     # For debugging
     def __repr__(self):
