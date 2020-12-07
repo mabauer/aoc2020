@@ -7,6 +7,8 @@ import sys
 class DirectedGraph:
 
     def __init__(self):
+        # Example graph:
+        # {'brightwhite': {'lightred': 1, 'darkorange': 3}, {'lightred': {}}. {'darkorange': {}}}
         self.nodes = {}
 
     def add_node(self, node):
@@ -59,51 +61,42 @@ class DirectedGraph:
         str = "{nodes}" 
         return str.format(nodes=self.nodes)
 
-    
-def build_graph_part1(input):
+# Build directed graph: 
+#   if use_contains == True, an edge from bag1 to bag2 means that bag1 contains number (=weight) bag2s
+#   if use_contains == False, an edge from bag1 to bag2 indicates that number (=weight) bag2s are contained in bag1    
+def build_graph_from_rules(input, use_contains=False):
     graph = DirectedGraph()
     for line in input:
         words = line.split()
+        # words -> "light red bags contain..." 
         outer_bag = words[0] + words [1]
+        # words[3] -> "contain"
         words = words[4:]
         while len(words) > 0:
             number = words[0]
             if number != "no":
+                # words -> "1 bright white bag, 2 muted yellow bags.""
                 inner_bag = words[1] + words[2]
-                # print("Adding edge (%s, %s)" % (inner_bag, outer_bag))
-                graph.add_edge(inner_bag, outer_bag, int(number))
+                if use_contains:
+                    # print("Adding edge (%s, %s)" % (inner_bag, outer_bag))
+                    graph.add_edge(outer_bag, inner_bag, int(number))
+                else:
+                    # print("Adding edge (%s, %s)" % (inner_bag, outer_bag))
+                    graph.add_edge(inner_bag, outer_bag, int(number))
                 words = words[4:]
             else:
+                # words -> "no other bags.""
                 words = []
     # print(graph)
     return graph
-
-def build_graph_part2(input):
-    graph = DirectedGraph()
-    for line in input:
-        words = line.split()
-        outer_bag = words[0] + words [1]
-        words = words[4:]
-        while len(words) > 0:
-            number = words[0]
-            if number != "no":
-                inner_bag = words[1] + words[2]
-                # print("Adding edge (%s, %s) with weight %s" % (inner_bag, outer_bag, number))
-                graph.add_edge(outer_bag, inner_bag, int(number))
-                words = words[4:]
-            else:
-                words = []
-    # print(graph)
-    return graph
-
 
 def compute07(input):
-    graph = build_graph_part1(input)
+    graph = build_graph_from_rules(input)
     result = len(graph.find_all_reachable_nodes("shinygold"))
     return result
 
 def compute07b(input):
-    graph = build_graph_part2(input)
+    graph = build_graph_from_rules(input, use_contains=True)
     result = graph.accumulate_weights("shinygold")-1
     return result
 
