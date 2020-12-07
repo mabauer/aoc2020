@@ -12,7 +12,8 @@ class Day07Test(unittest.TestCase):
         input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example07.txt"
         with open(input_file) as f:
             input = [x.strip() for x in f]
-        self.assertEqual(day07.compute07(input), 0)
+        graph = day07.build_graph(input)
+        print(graph.find_all_reachable_nodes("shinygold"))
 
     def test_compute07b(self):
         input = [""]
