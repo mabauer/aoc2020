@@ -95,12 +95,12 @@ def build_graph_from_rules(input, use_contains=False):
     # print(graph)
     return graph
 
-def compute07(input):
+def part1(input):
     graph = build_graph_from_rules(input)
     result = len(graph.find_all_reachable_nodes("shinygold"))
     return result
 
-def compute07b(input):
+def part2(input):
     graph = build_graph_from_rules(input, use_contains=True)
     result = count_all_bags_recursively(graph, "shinygold")-1
     return result
@@ -112,8 +112,8 @@ def main():
     with open(input_file) as f:
         input = [x.strip() for x in f]
 
-    print("The solution for part 1 on the official input is %d" % (compute07(input)))
-    print("The solution for part 2 on the official input is %d" % (compute07b(input)))
+    print("The solution for part 1 on the official input is %d" % (part1(input)))
+    print("The solution for part 2 on the official input is %d" % (part2(input)))
 
 if __name__ == "__main__": 
     main()

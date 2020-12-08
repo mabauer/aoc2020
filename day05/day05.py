@@ -60,7 +60,7 @@ def compute_all_seatids(input):
     return seats
 
 # Find the highest seat id
-def compute05(input):
+def part1(input):
     seats = compute_all_seatids(input)
     return max(seats)
 
@@ -76,7 +76,7 @@ def find_our_seat(seats):
         i = i + 1
     return 0
 
-def compute05b(input):
+def part2(input):
     seats = compute_all_seatids(input)
     return find_our_seat(seats)
 
@@ -108,8 +108,8 @@ def main():
 
     print_cabin_layout(input)
 
-    print("The solution for part 1 (highest seat id) is %d" % (compute05(input)))
-    print("The solution for part 2 (our seat id) is %d" % (compute05b(input)))
+    print("The solution for part 1 (highest seat id) is %d" % (part1(input)))
+    print("The solution for part 2 (our seat id) is %d" % (part2(input)))
 
 if __name__ == "__main__": 
     main()

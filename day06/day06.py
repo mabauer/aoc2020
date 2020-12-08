@@ -60,7 +60,7 @@ def parse_groups(input):
     return groups 
 
 # Count the questions to which anyone in a group answered with "yes"
-def compute06(input):
+def part1(input):
     groups = parse_groups(input)
     # print(groups)
     sum = 0
@@ -69,7 +69,7 @@ def compute06(input):
     return sum
 
 # Count the questions to which everyone in a group answered with "yes"
-def compute06b(input):
+def part2(input):
     groups = parse_groups(input)
     # print(groups)
     sum = 0
@@ -84,8 +84,8 @@ def main():
     with open(input_file) as f:
         input = [x.strip() for x in f]
 
-    print("The solution for part 1 on the official input is %d" % (compute06(input)))
-    print("The solution for part 2 on the official input is %d" % (compute06b(input)))
+    print("The solution for part 1 on the official input is %d" % (part1(input)))
+    print("The solution for part 2 on the official input is %d" % (part2(input)))
 
 if __name__ == "__main__": 
     main()

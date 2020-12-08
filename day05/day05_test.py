@@ -23,15 +23,15 @@ class Day05Test(unittest.TestCase):
         self.assertEqual(day05.compute_seat2("BBFFBBFRLL"), (102, 4))
 
 
-    def test_compute05(self):
+    def test_part1(self):
         input = ["BFFFBBFRRR", "FFFBBBFRRR", "BBFFBBFRLL"]
-        self.assertEqual(day05.compute05(input), 820)
+        self.assertEqual(day05.part1(input), 820)
 
-    def test_compute05_on_example_data(self):
+    def test_part1_on_example_data(self):
         input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example05.txt"
         with open(input_file) as f:
             input = [x.strip() for x in f]
-        self.assertEqual(day05.compute05(input), 820)
+        self.assertEqual(day05.part1(input), 820)
 
 if __name__ == "__main__": 
     unittest.main()
