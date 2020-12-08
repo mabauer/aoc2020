@@ -4,8 +4,37 @@ import re
 import os
 import sys
 
+def execute_code(instructions):
+    acc = 0
+    i_ptr = 0
+    already_run = []
+    for i in range(0, len(instructions)):
+        already_run.append(False)
+    while i_ptr < len(instructions):
+        (instr, arg) = instructions[i_ptr]
+        if already_run[i_ptr]:
+            return acc
+        print("%s %d" % (instr, arg))
+        already_run[i_ptr] = True
+        if instr == "acc":
+            acc += arg
+        if instr == "jmp":
+            i_ptr += arg
+        else:
+            i_ptr += 1
+    return acc
+
+def parse_instructions(input):
+    instructions = []
+    for line in input:
+        (instr, arg_as_str) = line.split()
+        arg = int(arg_as_str)
+        instructions.append((instr, arg))
+    return instructions
+
 def compute08(input):
-    result = 0
+    instructions = parse_instructions(input)
+    result = execute_code(instructions)
     return result
 
 def compute08b(input):
