@@ -4,6 +4,18 @@ import re
 import os
 import sys
 
+# Parse program code into a list of instruction tuples (instr, arg) 
+def parse_instructions(input):
+    instructions = []
+    for line in input:
+        (instr, arg_as_str) = line.split()
+        arg = int(arg_as_str)
+        instructions.append((instr, arg))
+    return instructions
+
+# Execute a list of instructions, returns:
+#   (True, acc) if a loop has been detected
+#   (False, acc) if the program ended normally
 def execute_code(instructions):
     acc = 0
     i_ptr = 0
@@ -21,16 +33,9 @@ def execute_code(instructions):
             i_ptr += 1
     return (False, acc)
 
-def parse_instructions(input):
-    instructions = []
-    for line in input:
-        (instr, arg_as_str) = line.split()
-        arg = int(arg_as_str)
-        instructions.append((instr, arg))
-    return instructions
-
-def patch_code(instructions, patched_instr):
-    i_ptr = patched_instr
+# Create a patched list of instructions, beginning at start_instr
+def patch_code(instructions, start_instr):
+    i_ptr = start_instr
     result = instructions.copy()
     while i_ptr < len(result):
         (instr, arg) = result[i_ptr]
@@ -43,7 +48,7 @@ def patch_code(instructions, patched_instr):
         i_ptr += 1
     raise ValueError("Program could not be fixed!")
 
-
+# Try to fix the infinite loop by iteratively trying out patched instructions 
 def fix_loop(instructions):
     loop_detected = True
     patched_code = instructions
