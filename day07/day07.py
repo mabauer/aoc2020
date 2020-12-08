@@ -8,6 +8,8 @@ class DirectedGraph:
 
     def __init__(self):
         # Example graph:
+        # brightwhite +-(1)-> lightred
+        #             +-(3)-> darkorange
         # {'brightwhite': {'lightred': 1, 'darkorange': 3}, {'lightred': {}}. {'darkorange': {}}}
         self.nodes = {}
 
@@ -29,6 +31,7 @@ class DirectedGraph:
     def get_all_nodes(self):
         return [node for node in self.nodes] 
 
+    # Not really needed, but useful for debugging purposes
     def get_all_edges(self):
         result = []
         for node in self.get_all_nodes():
@@ -47,19 +50,21 @@ class DirectedGraph:
                 visited.union(self.find_all_reachable_nodes(next, visited))
         return visited
 
-    def accumulate_weights(self, node):   
-        if not node in self.nodes:
-            return 0
-        result = 1
-        for neighbour in self.get_neighbours(node):
-            weight = self.get_weight(node, neighbour)
-            result = result + weight * self.accumulate_weights(neighbour)
-        return result
-
     # For debugging
     def __repr__(self):
         str = "{nodes}" 
         return str.format(nodes=self.nodes)
+
+
+# Recursively count all inner bags (using the containment graph)
+def count_all_bags_recursively(graph, bag):   
+    if not bag in graph.get_all_nodes():
+        return 0
+    result = 1
+    for inner_bag in graph.get_neighbours(bag):
+        weight = graph.get_weight(bag, inner_bag)
+        result = result + weight * count_all_bags_recursively(graph, inner_bag)
+    return result
 
 # Build directed graph: 
 #   if use_contains == True, an edge from bag1 to bag2 means that bag1 contains number (=weight) bag2s
@@ -97,7 +102,7 @@ def compute07(input):
 
 def compute07b(input):
     graph = build_graph_from_rules(input, use_contains=True)
-    result = graph.accumulate_weights("shinygold")-1
+    result = count_all_bags_recursively(graph, "shinygold")-1
     return result
 
 def main():    

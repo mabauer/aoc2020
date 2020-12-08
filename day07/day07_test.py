@@ -23,7 +23,7 @@ class Day07Test(unittest.TestCase):
             input = [x.strip() for x in f]
         graph = day07.build_graph_from_rules(input, use_contains=True)
         # print(graph)
-        self.assertEqual(graph.accumulate_weights("shinygold")-1, 32)
+        self.assertEqual(day07.count_all_bags_recursively(graph, "shinygold")-1, 32)
 
     def test_compute07b(self):
         input = [
@@ -36,7 +36,7 @@ class Day07Test(unittest.TestCase):
             "dark violet bags contain no other bags."
         ]
         graph = day07.build_graph_from_rules(input, use_contains=True)
-        self.assertEqual(graph.accumulate_weights("shinygold")-1, 126)
+        self.assertEqual(day07.count_all_bags_recursively(graph, "shinygold")-1, 126)
 
 
 if __name__ == "__main__": 
