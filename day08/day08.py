@@ -7,9 +7,7 @@ import sys
 def execute_code(instructions):
     acc = 0
     i_ptr = 0
-    already_run = []
-    for i in range(0, len(instructions)):
-        already_run.append(False)
+    already_run = [ False for i in range(len(instructions))]
     while i_ptr < len(instructions):
         (instr, arg) = instructions[i_ptr]
         if already_run[i_ptr]:
@@ -44,7 +42,7 @@ def patch_code(instructions, patched_instr):
             return (result, i_ptr)
         i_ptr += 1
     raise ValueError("Program could not be fixed!")
-    return (result, i_ptr)
+
 
 def fix_loop(instructions):
     loop_detected = True
@@ -74,7 +72,7 @@ def main():
     # Official input
     input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input08.txt"
     with open(input_file) as f:
-        input = [x.strip() for x in f]
+        input = [l.strip() for l in f]
 
     print("The solution for part 1 on the official input is %d" % (compute08(input)))
     print("The solution for part 2 on the official input is %d" % (compute08b(input)))
