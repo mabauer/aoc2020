@@ -13,8 +13,7 @@ def execute_code(instructions):
     while i_ptr < len(instructions):
         (instr, arg) = instructions[i_ptr]
         if already_run[i_ptr]:
-            return acc
-        print("%s %d" % (instr, arg))
+            return (True, acc)
         already_run[i_ptr] = True
         if instr == "acc":
             acc += arg
@@ -22,7 +21,7 @@ def execute_code(instructions):
             i_ptr += arg
         else:
             i_ptr += 1
-    return acc
+    return (False, acc)
 
 def parse_instructions(input):
     instructions = []
@@ -32,13 +31,42 @@ def parse_instructions(input):
         instructions.append((instr, arg))
     return instructions
 
+def patch_code(instructions, patched_instr):
+    i_ptr = patched_instr
+    result = instructions.copy()
+    while i_ptr < len(result):
+        (instr, arg) = result[i_ptr]
+        if instr == "nop":
+            result[i_ptr] = ("jmp", arg)
+            return (result, i_ptr)
+        if instr == "jmp":
+            result[i_ptr] = ("nop", arg)
+            return (result, i_ptr)
+        i_ptr += 1
+    raise ValueError("Program could not be fixed!")
+    return (result, i_ptr)
+
+def fix_loop(instructions):
+    loop_detected = True
+    patched_code = instructions
+    patched_instr = 0
+    while loop_detected:
+        # print(patched_code, end=" -> ")
+        (loop_detected, acc) = execute_code(patched_code)
+        # print((loop_detected, acc))
+        if loop_detected:
+            (patched_code, patched_instr) = patch_code(instructions, patched_instr)
+            patched_instr += 1
+    return acc
+
 def compute08(input):
     instructions = parse_instructions(input)
-    result = execute_code(instructions)
+    (loop_detected, result) = execute_code(instructions)
     return result
 
 def compute08b(input):
-    result = 0
+    instructions = parse_instructions(input)
+    result = fix_loop(instructions)
     return result
 
 def main():    
