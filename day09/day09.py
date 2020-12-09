@@ -6,11 +6,12 @@ import sys
 
 from typing import List
 
+# Convert input into list of ints
 def read_numbers(input: List[str]) -> List[int]:
     result = [ int(line) for line in input ]
     return result
 
-
+# Verify if number equals to the sum of some pair in to_consider
 def verify_number(number: int, to_consider: List[int]) -> bool:
     # print("%d -> %s" % (number, to_consider))
     for first in to_consider:
@@ -21,28 +22,36 @@ def verify_number(number: int, to_consider: List[int]) -> bool:
                     return True
     return False
 
-def find_weakness(input: List[int], preamble: int) -> int:
-    if len(input) <= preamble + 1:
+# Find the weakness in a list of ints, i.e. a number that cannot be reproduced by the sum of 
+# some pair of numbers in a rolling window of numbers previously read
+# Consider a sliding/rolling window of window_size.
+def find_weakness(input: List[int], window_size: int) -> int:
+    if len(input) <= window_size + 1:
         raise ValueError("Input to short")
-    to_consider = input[:preamble]
-    input = input[preamble:]
+    # Prefill window
+    sliding_window = input[:window_size]
+    input = input[window_size:]
     while len(input) > 0:
+        # "Pop" the next item from the input 
         next = input[0]
         input = input[1:]
-        if not verify_number(next, to_consider):
+        if not verify_number(next, sliding_window):
             return next
-        to_consider.append(next)
-        to_consider = to_consider[1:] 
+        # Move sliding window by 1
+        sliding_window.append(next)
+        sliding_window = sliding_window[1:] 
     raise ValueError("No weakness found")
 
+# Find a contiguous block of numbers whose sum equals weakness
 def find_contiguous_block(input: List[int], weakness: int) -> List[int]:
     result : List[int] = []
     i = 0
     sum = 0
     while i < len(input):
+        j = i 
+        # Try building a block starting from position j
         sum = 0
         result = []
-        j = i + 1
         while j < len(input):
             sum += input[j]
             result.append(input[j])
@@ -55,12 +64,12 @@ def find_contiguous_block(input: List[int], weakness: int) -> List[int]:
     return result
 
 
-def part1(input, preamble=25):
-    return find_weakness(read_numbers(input), preamble)
+def part1(input, window_size=25):
+    return find_weakness(read_numbers(input), window_size)
 
-def part2(input, preamble=25):
+def part2(input, window_size=25):
     numbers = read_numbers(input)
-    weakness = find_weakness(numbers, preamble)
+    weakness = find_weakness(numbers, window_size)
     block = find_contiguous_block(numbers, weakness)
     first = min(block)
     second = max(block)
