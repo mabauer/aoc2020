@@ -27,7 +27,7 @@ def verify_number(number: int, to_consider: List[int]) -> bool:
 # Consider a sliding/rolling window of window_size.
 def find_weakness(input: List[int], window_size: int) -> int:
     if len(input) <= window_size + 1:
-        raise ValueError("Input to short")
+        raise ValueError("Input too short")
     # Prefill window
     sliding_window = input[:window_size]
     input = input[window_size:]
@@ -44,24 +44,23 @@ def find_weakness(input: List[int], window_size: int) -> int:
 
 # Find a contiguous block of numbers whose sum equals weakness
 def find_contiguous_block(input: List[int], weakness: int) -> List[int]:
-    result : List[int] = []
+    block : List[int] = []
     i = 0
     sum = 0
     while i < len(input):
         j = i 
         # Try building a block starting from position j
         sum = 0
-        result = []
-        while j < len(input):
-            sum += input[j]
-            result.append(input[j])
+        block = []
+        while j < len(input) and sum < weakness:
+            next = input[j]
+            sum += next
+            block.append(next)
             if sum == weakness:
-                return result
-            if sum > weakness:
-                break
+                return block
             j += 1    
         i += 1
-    return result
+    return block
 
 
 def part1(input, window_size=25):
