@@ -9,6 +9,7 @@ from typing import List
 OCCUPIED = "#"
 EMPTY = "L"
 
+# Allocating seats as "Game of Life"
 class Game:
 
     def __init__(self, lines: List[str]):
@@ -18,14 +19,19 @@ class Game:
         for line in lines:
             self.cells.append(line)
     
+    # Compute a new generation according to the rules of part 1
+    # Returns True, if thee new generation differs from the old one.
     def next_generation(self) -> bool:
-        changed = False
+        # Precalculate the number of neighbours
         number_of_neighbours : List[List[int]]= []
         for y in range(0, len(self.cells)):
             line : List[int] = []
             for x in range(0, len(self.cells[y])):
                 line.append(self.count_occupied_neighbours(x, y))
             number_of_neighbours.append(line)
+
+        # Compute next generation
+        changed = False
         for y in range(0, len(self.cells)):
             for x in range(0, len(self.cells[y])):
                 c = number_of_neighbours[y][x]
@@ -37,14 +43,19 @@ class Game:
                     changed = True 
         return changed
 
+    # Compute a new generation according to the rules of part 2
+    # Returns True, if thee new generation differs from the old one.
     def next_generation_part2(self) -> bool:
-        changed = False
+        # Precalculate the number of neighbours
         number_of_neighbours : List[List[int]]= []
         for y in range(0, len(self.cells)):
             line : List[int] = []
             for x in range(0, len(self.cells[y])):
-                line.append(self.count_visible_occupied_neighbours(x, y))
+                line.append(self.count_visible_occupied_seats(x, y))
             number_of_neighbours.append(line)
+        
+        # Compute next generation
+        changed = False
         for y in range(0, len(self.cells)):
             for x in range(0, len(self.cells[y])):
                 c = number_of_neighbours[y][x]
@@ -63,6 +74,7 @@ class Game:
     def set_cell(self, x: int, y: int, value: str):
         self.cells[y] = self.cells[y][:x] + value + self.cells[y][x+1:]
 
+    # Count the number of occupied cells next to the cell (x, y)
     def count_occupied_neighbours(self, x: int, y: int) -> int:
         result = 0
         # Left upper neighbour
@@ -91,7 +103,9 @@ class Game:
             result += 1
         return result
 
-    def is_visible_line_occupied(self, x: int, y: int, dx: int, dy : int) -> bool:
+    # Part 2: Can we see an occupied cell from cell (x, y) along straight lines (vertical, horizontal, diaginal)
+    # The lines can be specified by (dx, dy), e.g. (1, 1) denotes the diagonal going upwards-rightwards
+    def is_occupied_seat_in_visible_line(self, x: int, y: int, dx: int, dy : int) -> bool:
         occupied = False
         while not occupied:
             x += dx
@@ -107,36 +121,36 @@ class Game:
                 break
         return occupied
 
-
-    def count_visible_occupied_neighbours(self, x: int, y: int) -> int:
+    # Part 2: Count the number of occupied seats we can see from cell (x, y)
+    def count_visible_occupied_seats(self, x: int, y: int) -> int:
         result = 0
         # Left upper neighbour
-        if self.is_visible_line_occupied(x, y, -1, -1):
+        if self.is_occupied_seat_in_visible_line(x, y, -1, -1):
             result += 1
         # Middle upper neighbour
-        if self.is_visible_line_occupied(x, y, 0, -1):
+        if self.is_occupied_seat_in_visible_line(x, y, 0, -1):
             result += 1
         # Right upper neighbour
-        if self.is_visible_line_occupied(x, y, 1, -1):
+        if self.is_occupied_seat_in_visible_line(x, y, 1, -1):
             result += 1
         # Left neigbour
-        if self.is_visible_line_occupied(x, y, -1, 0):
+        if self.is_occupied_seat_in_visible_line(x, y, -1, 0):
             result += 1
         # Right neighbour
-        if self.is_visible_line_occupied(x, y, 1, 0):
+        if self.is_occupied_seat_in_visible_line(x, y, 1, 0):
             result += 1
         # Lower left neighbour
-        if self.is_visible_line_occupied(x, y, -1, 1):
+        if self.is_occupied_seat_in_visible_line(x, y, -1, 1):
             result += 1
         # Lower neighbour
-        if self.is_visible_line_occupied(x, y, 0, 1):
+        if self.is_occupied_seat_in_visible_line(x, y, 0, 1):
             result += 1
         # Lower right neighbour
-        if self.is_visible_line_occupied(x, y, 1, 1):
+        if self.is_occupied_seat_in_visible_line(x, y, 1, 1):
             result += 1
         return result
 
-
+    # Count the occupied seats in the game
     def count_occupied_seats(self):
         result = 0
         for line in self.cells:
