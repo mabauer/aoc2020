@@ -13,6 +13,7 @@ def read_numbers(input: List[str]) -> List[int]:
     result = [ int(line) for line in input ]
     return result
 
+# Count the 1- and 3-step joltage jumps for part 1
 def find_differences_in_adapter_chain(adapters: List[int]) -> Tuple[int, int]:
     adapters.sort()
     i = 0
@@ -33,22 +34,30 @@ def find_differences_in_adapter_chain(adapters: List[int]) -> Tuple[int, int]:
     threes += 1
     return (ones, threes)
 
-def find_adapter_chains(current: int, pos: int, adapters: List[int], chain : List[int]) -> List[List[int]]:
-    chains: List[List[int]] = []
-    chain.append(current) 
-    if pos == len(adapters):
+# Compute all possible varinats of adapter chains
+# This does not terminate for longer inputs!!!
+def find_adapter_chains(start: int, adapters: List[int], chain=None) -> List[List[int]]:
+    if chain == None:
+        chain = []
+    current = adapters[start]
+    chain.append(current)
+    # print("%s, -- %d" % (chain, current))
+    if start == len(adapters)-1:
         return [chain]
+    chains: List[List[int]] = []
+    pos = start + 1 
     while pos < len(adapters):
         next = adapters[pos]
-        pos += 1
         difference = next - current
         if difference > 3:
             break
         if difference <= 3 :
-            chains = chains + (find_adapter_chains(next, pos, adapters, chain.copy()))
-        print(chains)
+            chains = chains + (find_adapter_chains(pos, adapters, chain.copy()))
+        pos += 1
     return chains
 
+# Count the number of all possible varinats of adapter chains using dynamic programming
+# By memorizing previously computed partial results this implementation works for larger inputs!
 def count_adapter_chains(start: int, adapters: List[int], memo: Dict[int, int]=None) -> int:
     if memo == None:
         memo = {}
