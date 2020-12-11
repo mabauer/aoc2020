@@ -24,7 +24,7 @@ class Game:
         for y in range(0, len(self.cells)):
             line : List[int] = []
             for x in range(0, len(self.cells[y])):
-                line.append(self.count_neighbours(x, y))
+                line.append(self.count_occupied_neighbours(x, y))
             number_of_neighbours.append(line)
         for y in range(0, len(self.cells)):
             for x in range(0, len(self.cells[y])):
@@ -37,13 +37,33 @@ class Game:
                     changed = True 
         return changed
 
+    def next_generation_part2(self) -> bool:
+        changed = False
+        number_of_neighbours : List[List[int]]= []
+        for y in range(0, len(self.cells)):
+            line : List[int] = []
+            for x in range(0, len(self.cells[y])):
+                line.append(self.count_visible_occupied_neighbours(x, y))
+            number_of_neighbours.append(line)
+        for y in range(0, len(self.cells)):
+            for x in range(0, len(self.cells[y])):
+                c = number_of_neighbours[y][x]
+                if self.get_cell(x, y) == OCCUPIED and c >= 5:
+                    self.set_cell(x, y, EMPTY)
+                    changed = True
+                if self.get_cell(x, y) == EMPTY and c == 0:
+                    self.set_cell(x, y, OCCUPIED)
+                    changed = True 
+        return changed
+
+
     def get_cell(self, x: int, y: int)  -> str:
         return self.cells[y][x]       
 
     def set_cell(self, x: int, y: int, value: str):
         self.cells[y] = self.cells[y][:x] + value + self.cells[y][x+1:]
 
-    def count_neighbours(self, x: int, y: int) -> int:
+    def count_occupied_neighbours(self, x: int, y: int) -> int:
         result = 0
         # Left upper neighbour
         if x-1 >= 0 and y-1 >= 0 and self.get_cell(x-1, y-1) == OCCUPIED:
@@ -71,6 +91,52 @@ class Game:
             result += 1
         return result
 
+    def is_visible_line_occupied(self, x: int, y: int, dx: int, dy : int) -> bool:
+        occupied = False
+        while not occupied:
+            x += dx
+            y += dy
+            if x > self.x_max or x < 0:
+                break
+            if y > self.y_max or y < 0:
+                break
+            if self.get_cell(x, y) == OCCUPIED:
+                occupied = True
+                break
+            if self.get_cell(x, y) == EMPTY:
+                break
+        return occupied
+
+
+    def count_visible_occupied_neighbours(self, x: int, y: int) -> int:
+        result = 0
+        # Left upper neighbour
+        if self.is_visible_line_occupied(x, y, -1, -1):
+            result += 1
+        # Middle upper neighbour
+        if self.is_visible_line_occupied(x, y, 0, -1):
+            result += 1
+        # Right upper neighbour
+        if self.is_visible_line_occupied(x, y, 1, -1):
+            result += 1
+        # Left neigbour
+        if self.is_visible_line_occupied(x, y, -1, 0):
+            result += 1
+        # Right neighbour
+        if self.is_visible_line_occupied(x, y, 1, 0):
+            result += 1
+        # Lower left neighbour
+        if self.is_visible_line_occupied(x, y, -1, 1):
+            result += 1
+        # Lower neighbour
+        if self.is_visible_line_occupied(x, y, 0, 1):
+            result += 1
+        # Lower right neighbour
+        if self.is_visible_line_occupied(x, y, 1, 1):
+            result += 1
+        return result
+
+
     def count_occupied_seats(self):
         result = 0
         for line in self.cells:
@@ -94,7 +160,14 @@ def part1(input):
 
 
 def part2(input):
-    result = 0
+    game = Game(input)
+    gens = 0
+    while game.next_generation_part2():
+        gens += 1
+        game.print()
+        print()
+    print("Stable after %d generations." % gens)
+    result = game.count_occupied_seats()
     return result
 
 def main():    
