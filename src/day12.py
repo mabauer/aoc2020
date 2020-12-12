@@ -90,6 +90,7 @@ class Ship:
 
     def turn_left(self, degrees: int):  
         if self.use_waypoint:
+             # Compare the two different rotation implementations and raise an exception if they differ
             p1 = rotate_point((self.wp_x, self.wp_y), degrees)
             p2 = rotate_point_by_90s((self.wp_x, self.wp_y), degrees)
             if p1 != p2:
@@ -101,6 +102,7 @@ class Ship:
 
     def turn_right(self, degrees: int):
         if self.use_waypoint:
+            # Compare the two different rotation implementations and raise an exception if they differ
             p1 = rotate_point((self.wp_x, self.wp_y), -degrees)
             p2 = rotate_point_by_90s((self.wp_x, self.wp_y), -degrees)
             if p1 != p2:
