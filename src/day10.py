@@ -82,6 +82,37 @@ def count_adapter_chains(start: int, adapters: List[int], memo: Dict[int, int]=N
         memo[start] = chains    
     return chains
 
+def count_adapter_chains_iterative(adapters: List[int]) -> int:
+    # maybe_skipped[i] will contain a list of all adapters that can possibly omitted 
+    # while building an adapter chain starting from adapter with joltage i
+    maybe_skipped : Dict[int, List[int]] = {}
+    for adapter in adapters:
+        maybe_skipped[adapter] = []
+    for adapter in adapters:
+        for difference in [1, 2, 3]:
+            next = adapter + difference
+            if next in adapters:
+                maybe_skipped[adapter].append(next)
+
+    # Count the number of possible chains backwards: 
+    # For the last adapter, there is only one possibility of building a chain
+    # For earlier ones, it is the sum of all possibilities of those that we have previously computed.
+    # For [0, 1, 3, 4]:
+    # skippable[0] = [1, 3], skippable[1] = [3, 4], skippable[3] = [4], skippable[4]=[]
+    # chains[4] = 1, 
+    # chains[3] = chains[4] = 1
+    # chains[1] = chains[3] + chains[4] = 1 + 1 = 2
+    # chains[0] = chains[1] + chains[3] = 2 + 1 = 3 <= There are 3 possible chains
+    chains : Dict[int, int] = {}
+    chains[adapters[len(adapters)-1]] = 1
+    for adapter in reversed(adapters[0:len(adapters)-1]):
+        sum = 0
+        # print("%d: %s" % (adapter, maybe_skipped[adapter]))
+        for next in maybe_skipped[adapter]:
+            sum += chains[next]
+        chains[adapter] = sum
+    return chains[0]
+            
 def part1(input):
     adapters = read_numbers(input)
     (ones, threes) = find_differences_in_adapter_chain(adapters)
@@ -95,7 +126,7 @@ def part2(input):
     adapters.append(device)
     adapters.sort()
     # print(adapters)
-    chains = count_adapter_chains(0, adapters, {})
+    chains = count_adapter_chains_iterative(adapters)
     return chains
 
 def main():    
@@ -104,8 +135,6 @@ def main():
     input = read_inputfile("input10.txt")
 
     print("The solution for part 1 on the official input is %d" % (part1(input)))
-
-    print("Computing part 2 -- this may take a couple of minutes!")
     print("The solution for part 2 on the official input is %d" % (part2(input)))
 
 if __name__ == "__main__": 
