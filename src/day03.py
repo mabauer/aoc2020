@@ -3,6 +3,8 @@
 import os
 from functools import reduce
 
+from utils import read_inputfile
+
 # Count trees encountered in the map when applying a trajectory with parameters right, down 
 def count_trees(map, right, down):
     count = 0
@@ -43,9 +45,7 @@ def main():
         ".#..#...#.#"]
 
     # Official input
-    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input03.txt"
-    with open(input_file) as f:
-        input2 = [x.strip() for x in f]
+    input2 = read_inputfile("input03.txt")
 
     print("The trajectory for the example data encounters %d trees" % (count_trees(input1, 3, 1)))
     print("The trajectory for the official input encounters %d trees" % (count_trees(input2, 3, 1)))

@@ -7,6 +7,8 @@ import math
 from typing import List
 from typing import Tuple
 
+from utils import read_inputfile
+
 # Rotate a point around the origin (by an aritrary angle)
 def rotate_point(point: Tuple[int, int], angle: int) -> Tuple[int, int]:
     (x, y) = point
@@ -142,7 +144,7 @@ class Ship:
                 self.turn_right(value)
             if cmd == "F":
                 self.go_forward(value)
-            self.print()
+            # self.print()
     
     def print(self):
         if self.use_waypoint:
@@ -154,7 +156,7 @@ class Ship:
             
 def part1(input):
     ship = Ship()
-    ship.print()
+    # ship.print()
     ship.navigate(input)
     result = ship.compute_distance()
     return result
@@ -162,7 +164,7 @@ def part1(input):
 def part2(input):
     ship = Ship()
     ship.turnon_waypoint(10, 1)
-    ship.print()
+    # ship.print()
     ship.navigate(input)
     result = ship.compute_distance()
     return result
@@ -170,9 +172,7 @@ def part2(input):
 def main():    
 
     # Official input
-    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input12.txt"
-    with open(input_file) as f:
-        input = [l.strip() for l in f]
+    input = read_inputfile("input12.txt")
 
     print("The solution for part 1 on the official input is %d" % (part1(input)))
     print("The solution for part 2 on the official input is %d" % (part2(input)))

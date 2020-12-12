@@ -2,6 +2,8 @@
 
 import os
 
+from utils import read_inputfile
+
 # Find three integers in a list that sum up to 2020
 def find_entries_for_2020(expenses):
     for first in expenses:
@@ -18,9 +20,7 @@ def main():
     print("The example result is %d * %d * %d = %d" % (first, second, third, first*second*third))
 
     # Official data 
-    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input01.txt"
-    with open(input_file) as f:
-        input2 = [int(x) for x in f]
+    input2 = [ int(s) for s in read_inputfile("input01.txt") ]
 
     (first, second, third) = find_entries_for_2020(input2)
     print("The answer on official data is: %d" % (first*second*third))

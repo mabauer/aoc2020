@@ -5,13 +5,12 @@ import os
 import sys
 
 import day10
+from utils import read_inputfile
 
 class Day10Test(unittest.TestCase):
 
     def test_part1_on_example_a(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example10a.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile("example10a.txt")
          
         adapters = day10.read_numbers(input)
         print(adapters)
@@ -28,9 +27,7 @@ class Day10Test(unittest.TestCase):
         self.assertEqual(len(day10.find_adapter_chains(0, [0, 1, 4, 5, 6, 7, 10, 11, 13], [])), 8)
 
     def test_find_adapter_chains_on_example_a(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example10a.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile("example10a.txt")
 
         adapters = day10.read_numbers(input)
         adapters.append(0)
@@ -40,9 +37,7 @@ class Day10Test(unittest.TestCase):
         self.assertEquals(len(chains), 8)
 
     def test_find_adapter_chains_on_example_b(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example10b.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile("example10b.txt")
 
         adapters = day10.read_numbers(input)
         adapters.append(0)
@@ -54,16 +49,12 @@ class Day10Test(unittest.TestCase):
 
 
     def test_part2_on_example_a(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example10a.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile("example10a.txt")
         
         self.assertEqual(day10.part2(input), 8)
 
     def test_part2_on_example_b(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example10b.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile("example10b.txt")
 
         self.assertEqual(day10.part2(input), 19208)
 

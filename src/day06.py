@@ -4,6 +4,8 @@ import re
 import os
 import sys
 
+from utils import read_inputfile
+
 class Group:
 
     def __init__(self): 
@@ -80,9 +82,7 @@ def part2(input):
 def main():    
 
     # Official input
-    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input06.txt"
-    with open(input_file) as f:
-        input = [x.strip() for x in f]
+    input = read_inputfile("input06.txt")
 
     print("The solution for part 1 on the official input is %d" % (part1(input)))
     print("The solution for part 2 on the official input is %d" % (part2(input)))

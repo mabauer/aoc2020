@@ -5,27 +5,24 @@ import os
 import sys
 
 import day09
+from utils import read_inputfile
+
+examplefile = "example09.txt"
 
 class Day09Test(unittest.TestCase):
 
     def test_part1_on_example_data(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example09.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile(examplefile)
         numbers = day09.read_numbers(input)
         self.assertEqual(day09.find_weakness(numbers, 5), 127)
 
     def test_find_contiguous_block(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example09.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile(examplefile)
         numbers = day09.read_numbers(input)
         self.assertEqual(day09.find_contiguous_block(numbers, 127), [15, 25, 47, 40])
 
     def test_part2_on_example_data(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example09.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile(examplefile)
         self.assertEqual(day09.part2(input, 5), 62)
         
 

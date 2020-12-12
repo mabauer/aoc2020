@@ -6,6 +6,8 @@ import sys
 
 from typing import List
 
+from utils import read_inputfile
+
 OCCUPIED = "#"
 EMPTY = "L"
 
@@ -187,9 +189,7 @@ def part2(input):
 def main():    
 
     # Official input
-    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input11.txt"
-    with open(input_file) as f:
-        input = [l.strip() for l in f]
+    input = read_inputfile("input11.txt")
 
     print("The solution for part 1 on the official input is %d" % (part1(input)))
     print("The solution for part 2 on the official input is %d" % (part2(input)))

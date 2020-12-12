@@ -4,6 +4,8 @@ import re
 import os
 import sys
 
+from utils import read_inputfile
+
 def bisect(lower, upper):
     result = (lower + upper) // 2
     return result
@@ -102,9 +104,7 @@ def print_cabin_layout(input):
 def main():    
 
     # Official input
-    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input05.txt"
-    with open(input_file) as f:
-        input = [x.strip() for x in f]
+    input = read_inputfile("input05.txt")
 
     print_cabin_layout(input)
 

@@ -7,6 +7,7 @@ import sys
 from day11 import Game
 from day11 import part1
 from day11 import part2
+from utils import read_inputfile
 
 class Day11Test(unittest.TestCase):
 
@@ -35,22 +36,16 @@ class Day11Test(unittest.TestCase):
         self.assertEqual(game.count_occupied_neighbours(9, 0), 3)
 
     def test_count_visible_occupied_seats(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example11b.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile("example11b.txt")
         game : Game = Game(input)
         self.assertEqual(game.count_visible_occupied_seats(3, 4), 8)
 
     def test_part1_on_example_data(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example11a.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile("example11a.txt")
         self.assertEqual(part1(input), 37)
 
     def test_part2_on_example_data(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example11a.txt"
-        with open(input_file) as f:
-            input = [l.strip() for l in f]
+        input = read_inputfile("example11a.txt")
         self.assertEqual(part2(input), 26)
 
 if __name__ == "__main__": 

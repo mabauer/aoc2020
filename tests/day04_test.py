@@ -4,6 +4,8 @@ import unittest
 import os
 import sys
 
+from utils import read_inputfile
+
 import day04
 
 class Day04Test(unittest.TestCase):
@@ -32,15 +34,11 @@ class Day04Test(unittest.TestCase):
         self.assertFalse(day04.is_valid_hgt2("190"))
 
     def test_parse_passports(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example04.txt"
-        with open(input_file) as f:
-            input = [x.strip() for x in f]
+        input = read_inputfile("example04.txt")
         self.assertEqual(len(day04.parse_passports(input)), 4)
 
     def test_part1_on_example_data(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example04.txt"
-        with open(input_file) as f:
-            input = [x.strip() for x in f]
+        input = read_inputfile("example04.txt")
         self.assertEqual(day04.count_passports(input, True), 2)
 
     def test_part2_valid_passports(self):

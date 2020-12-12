@@ -5,22 +5,19 @@ import os
 import sys
 
 import day07
+from utils import read_inputfile
 
 class Day07Test(unittest.TestCase):
 
     def test_part1_on_example_data(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example07.txt"
-        with open(input_file) as f:
-            input = [x.strip() for x in f]
+        input = read_inputfile("example07.txt")
         graph = day07.build_graph_from_rules(input)
         # print(graph)
         # print(graph.find_all_reachable_nodes("shinygold"))
         self.assertEqual(len(graph.find_all_reachable_nodes("shinygold")),  4)
 
     def test_part2_on_example_data(self):
-        input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "example07.txt"
-        with open(input_file) as f:
-            input = [x.strip() for x in f]
+        input = read_inputfile("example07.txt")
         graph = day07.build_graph_from_rules(input, use_contains=True)
         # print(graph)
         self.assertEqual(day07.count_all_bags_recursively(graph, "shinygold")-1, 32)

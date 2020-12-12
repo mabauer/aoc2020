@@ -3,27 +3,36 @@
 import re
 import os
 
-# Is this password a valid one?
-def is_valid_passwd(passwd, letter, first, second):
+from utils import read_inputfile
+
+# Count the number of occurences of str2 in str1
+def count_occurences(str1, str2):
+    pos = 0
     count = 0
-    if passwd[first-1] == letter:
-        count = count + 1
-    if passwd[second-1] == letter:
-        count = count + 1
-    return (count == 1)
+    while pos >= 0:
+        pos = str1.find(str2)
+        if pos >= 0:
+            count = count + 1
+            str1 = str1[pos + len(str2):]
+    return count
+
+# Is this password a valid one?
+def is_valid_passwd(passwd, letter, min, max):
+    count = count_occurences(passwd, letter)
+    return (count >= min and count <= max)
 
 # Parse the input line
 def is_valid_passwd_entry(line):
     # "1-3 a: abcde"
-    # (first)-(second) (letter): (passwd)
+    # (min)-(max) (letter): (passwd)
     mo = re.search("([0-9]+)\-([0-9]+)\s([a-zA-Z]):\s(.*)", line)
-    first = int(mo.group(1))
-    second = int(mo.group(2))
+    min = int(mo.group(1))
+    max = int(mo.group(2))
     letter = mo.group(3)
     passwd = mo.group(4)
-    return is_valid_passwd(passwd, letter, first, second)
+    return is_valid_passwd(passwd, letter, min, max)
 
-# Count the number of valid passwords
+# count the number of valid passwords
 def count_valid_passwds(input):
     result = 0
     for line in input:
@@ -41,9 +50,7 @@ def main():
     print("The example data has %d valid passwords" % (count_valid_passwds(input1)))
 
     # Official data
-    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input02.txt"
-    with open(input_file) as f:
-        input2 = [x.strip() for x in f]
+    input2 = read_inputfile("input02.txt")
 
     print("The official data has %d valid passwords" % (count_valid_passwds(input2)))
 

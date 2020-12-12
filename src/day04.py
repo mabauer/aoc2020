@@ -4,10 +4,12 @@ import re
 import os
 import sys
 
+from utils import read_inputfile
+
 # Is year based field valid (within min..max)?
 def is_valid_year(year, min, max):
     if len(year) != 4:
-        return false
+        return False
     try:
         value = int(year)
         if value < min or value > max:
@@ -123,9 +125,7 @@ def count_passports(input, skip_partii_checks):
 def main():    
 
     # Official input
-    input_file = os.path.abspath(os.path.dirname(__file__)) + os.path.sep + "input04.txt"
-    with open(input_file) as f:
-        input = [x.strip() for x in f]
+    input = read_inputfile("input04.txt")
 
     print("The solution for part 1 on the official input is %d" % (count_passports(input, True)))
     print("The solution for part 2 on the official input is %d" % (count_passports(input, False)))
