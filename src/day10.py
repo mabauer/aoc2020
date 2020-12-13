@@ -66,7 +66,7 @@ def count_adapter_chains(start: int, adapters: List[int], memo: Dict[int, int]=N
     current = adapters[start]
     if start == len(adapters)-1:
         return 1
-    if memo and start in memo:
+    if memo is not None and start in memo:
         return memo[start]
     chains = 0
     pos = start + 1 
@@ -78,7 +78,7 @@ def count_adapter_chains(start: int, adapters: List[int], memo: Dict[int, int]=N
         if difference <= 3 :
             chains = chains + count_adapter_chains(pos, adapters, memo)
         pos += 1
-    if memo:
+    if memo is not None:
         memo[start] = chains    
     return chains
 
@@ -125,7 +125,7 @@ def part2(input):
     device = max(adapters) + 3
     adapters.append(device)
     adapters.sort()
-    # print(adapters)
+    # chains = count_adapter_chains(0, adapters, {})
     chains = count_adapter_chains_iterative(adapters)
     return chains
 
