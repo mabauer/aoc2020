@@ -41,7 +41,7 @@ class Day12Test(unittest.TestCase):
         input = ["F10", "L180", "F10"]
         ship = Ship()
         ship.turnon_waypoint(10, 1)
-        ship.print()
+        # ship.print()
         ship.navigate(input)
         self.assertEqual(ship.x, 0)
         self.assertEqual(ship.y, 0)

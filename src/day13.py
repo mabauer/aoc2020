@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-import logging
-import re
-import os
-import sys
+import math
 
 from typing import List, Tuple
 
@@ -73,6 +70,8 @@ def part2(s: str):
         time = t
         # factor == product of all previuos bus_numbers
         factor = factor*bus_number
+        # In case bus number are not prime:
+        # factor = math.lcm(factor, bus_number) 
     return time
 
     
