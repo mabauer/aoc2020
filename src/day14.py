@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 import re
-import os
-import sys
-import math
-from typing import Dict
+
+from typing import Dict, List
 
 from utils import read_inputfile
 
@@ -18,13 +16,25 @@ def bitwise_not(n, numbits=36):
 def apply_mask(value: int, mask: str):
     m1 = int(mask.replace("X", "0"), 2)
     m2 = int(mask.replace("X", "1"), 2)
-    # print("value: %s" % to_binary_str(value))
-    # print("mask: %s" % mask)
     value = value | m1
-    # print("after m1: %s" % to_binary_str(value))
     value = value & m2
-    # print("after m2: %s" % to_binary_str(value))
+    # print("Masked value: %s" % to_binary_str(value))
     return value
+
+def apply_mask_and_floating_bits(value: int, mask: str) -> List[int]:
+    m1 = int(mask.replace("X", "0"), 2)
+    value = value | m1
+    result : List[int]= []
+    result.append(value)
+    for i in range(0, len(mask)):
+        if mask[len(mask)-1-i] == "X":
+            old_result = result.copy()
+            result = []
+            for addr in old_result:
+                result.append(addr & ~(1 << i)) # Append with ith bit = 0
+                result.append(addr | (1 << i))  # Append with ith bit = 1
+            # print(result)
+    return result
 
 def run_instructions_part1(input):
     mask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -41,13 +51,31 @@ def run_instructions_part1(input):
             mem[addr] = apply_mask(value, mask)
     result = sum(mem.values())
     return result
+
+def run_instructions_part2(input):
+    mask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    mem : Dict[int, int] = {}
+    for line in input:
+        s = line.replace(" ", "")
+        (lhs, rhs) = s.split("=")
+        if lhs == "mask":
+            mask = rhs
+        else:
+            mo = re.search("mem\[([0-9]+)\]", lhs)
+            original_addr = int(mo.group(1))
+            addresses = apply_mask_and_floating_bits(original_addr, mask)
+            value = int(rhs)
+            for addr in addresses:
+                mem[addr] = value
+    result = sum(mem.values())
+    return result
         
 def part1(input):
     result = run_instructions_part1(input)
     return result
 
 def part2(input):
-    result = 0
+    result = run_instructions_part2(input)
     return result
 
 def main():    
