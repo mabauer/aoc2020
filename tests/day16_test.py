@@ -4,7 +4,7 @@ import unittest
 import os
 import sys
 
-from day16 import Rules, get_invalid_values, parse_input, part1, compute_your_ticket
+from day16 import Rules, parse_input, part1, compute_our_ticket
 from utils import read_inputfile
 
 class Day16Test(unittest.TestCase):
@@ -29,13 +29,9 @@ class Day16Test(unittest.TestCase):
     def test_compute_your_ticket_on_example_data_b(self):
         input = read_inputfile("example16b.txt")
         (rules, your_ticket_values, nearby_tickets) = parse_input(input)
-        nearby_tickets_copy = nearby_tickets.copy()
-        for ticket in nearby_tickets_copy:
-            invalid_values = get_invalid_values(ticket, rules)
-            if invalid_values != []:
-                nearby_tickets.remove(ticket)
-        print("Valid nearby tickets: %s" % nearby_tickets)
-        your_ticket = compute_your_ticket(rules, your_ticket_values, nearby_tickets)
+        nearby_tickets = rules.get_valid_tickets(nearby_tickets)
+        # print("Valid nearby tickets: %s" % nearby_tickets)
+        your_ticket = compute_our_ticket(rules, your_ticket_values, nearby_tickets)
         self.assertEqual(your_ticket["class"], 12)
         self.assertEqual(your_ticket["row"], 11)
         self.assertEqual(your_ticket["seat"], 13)
@@ -43,13 +39,9 @@ class Day16Test(unittest.TestCase):
     def test_compute_your_ticket_on_example_data_a(self):
         input = read_inputfile("example16a.txt")
         (rules, your_ticket_values, nearby_tickets) = parse_input(input)
-        nearby_tickets_copy = nearby_tickets.copy()
-        for ticket in nearby_tickets_copy:
-            invalid_values = get_invalid_values(ticket, rules)
-            if invalid_values != []:
-                nearby_tickets.remove(ticket)
-        print("Valid nearby tickets: %s" % nearby_tickets)
-        your_ticket = compute_your_ticket(rules, your_ticket_values, nearby_tickets)
+        nearby_tickets = rules.get_valid_tickets(nearby_tickets)
+        # print("Valid nearby tickets: %s" % nearby_tickets)
+        your_ticket = compute_our_ticket(rules, your_ticket_values, nearby_tickets)
         self.assertEqual(your_ticket["class"], 1)
         self.assertEqual(your_ticket["row"], 7)
         self.assertEqual(your_ticket["seat"], 14)
