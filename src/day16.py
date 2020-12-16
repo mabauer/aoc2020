@@ -73,7 +73,6 @@ def get_invalid_values(ticket: List[int], rules: Rules) -> List[int]:
     return result
 
 
-
 def part1(input):
     (rules, your_ticket, nearby_tickets) = parse_input(input)
     scanning_error = 0
@@ -81,13 +80,6 @@ def part1(input):
         invalid_values = get_invalid_values(ticket, rules)
         scanning_error += sum(invalid_values)
     return scanning_error
-
-
-def list_to_string(list: List[str]) -> str:
-    result = ""
-    for s in list:
-        result += s
-    return result
 
 def find_match_naive(fields: List[str], possible_matches: Dict[str, List[int]], rules: Rules) -> List[str]:
     solution : List[str] = []
@@ -105,6 +97,10 @@ def find_match_naive(fields: List[str], possible_matches: Dict[str, List[int]], 
             solution = list(possible_solution)
             break
     return solution
+
+
+def list_to_string(list: List[str]) -> str:
+    return "".join(list)
 
 def find_match(fields: List[str], possible_matches: Dict[str, List[int]], rules: Rules, 
         memo : Dict[str, List[str]] = None) -> List[str]: 
@@ -150,7 +146,9 @@ def compute_your_ticket(rules, your_ticket_values, nearby_tickets) -> Dict[str, 
     # print(possible_matches)
 
     # solution = find_match_naive([field for field in rules.rules.keys()], possible_matches, rules)
-    solution = find_match([field for field in rules.rules.keys()], possible_matches, rules)
+    fields = [ field for field in rules.rules.keys() ]
+    fields.sort(key=lambda field: len(possible_matches[field]))
+    solution = find_match(fields, possible_matches, rules)
     print(solution)
     if solution is None or solution == []:
         raise ValueError("Could not assign fields properly!")
@@ -163,8 +161,9 @@ def compute_your_ticket(rules, your_ticket_values, nearby_tickets) -> Dict[str, 
 
 def part2(input):
     (rules, your_ticket_values, nearby_tickets) = parse_input(input)
-    nearby_tickets_copy = nearby_tickets.copy()
+
     # Remove invalid nearby tickets
+    nearby_tickets_copy = nearby_tickets.copy()
     for ticket in nearby_tickets_copy:
         invalid_values = get_invalid_values(ticket, rules)
         if invalid_values != []:
