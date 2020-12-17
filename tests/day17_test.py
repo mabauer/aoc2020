@@ -4,14 +4,14 @@ import unittest
 import os
 import sys
 
-from day17 import Game, part1, part2
+from day17 import Game3D, part1, part2
 from utils import read_inputfile
 
 class Day17Test(unittest.TestCase):
 
     def test_cells(self):
         input = [".#.", "..#", "###"]
-        game = Game(input)
+        game = Game3D(input)
         game.print()
         self.assertEqual(game.count_active_cells(), 5)
         self.assertEqual(game.count_active_neighbours(0, 0, 0), 5)
@@ -24,10 +24,9 @@ class Day17Test(unittest.TestCase):
         input = [".#.", "..#", "###"]
         self.assertEqual(part1(input, 6), 112)
     
-
-    def test_part2(self):
-        input = [""]
-        self.assertEqual(part2(input), 0)
+    def test_example_part2(self):
+        input = [".#.", "..#", "###"]
+        self.assertEqual(part2(input), 848)
 
 if __name__ == "__main__": 
     unittest.main()
