@@ -52,16 +52,15 @@ class Game3D:
                 for x in range(self.x_min, self.x_max + 1):
                     old_state = self.get_cell(x, y, z)
                     c = number_of_neighbours[(x, y, z)]
-                    print(c, end="")
+                    # print(c, end="")
                     if old_state == INACTIVE and (c == 3):
                         self.set_cell(x, y, z, ACTIVE)
                     if old_state == ACTIVE and (c != 2 and c != 3):
                         self.set_cell(x, y, z, INACTIVE)
                     if self.get_cell(x, y, z) != old_state:
                         changed = True 
-                print()
-            print()
-        print(changed)
+                # print()
+            # print()
         return changed
 
     def get_cell(self, x: int, y: int, z: int)  -> str:
@@ -165,15 +164,12 @@ class Game4D:
                     for x in range(self.x_min, self.x_max + 1):
                         old_state = self.get_cell(x, y, z, w)
                         c = number_of_neighbours[(x, y, z, w)]
-                        print(c, end="")
                         if old_state == INACTIVE and (c == 3):
                             self.set_cell(x, y, z, w, ACTIVE)
                         if old_state == ACTIVE and (c != 2 and c != 3):
                             self.set_cell(x, y, z, w, INACTIVE)
                         if self.get_cell(x, y, z) != old_state:
                             changed = True 
-                    print()
-                print()
         return changed
 
     def get_cell(self, x: int, y: int, z: int, w: int = 0)  -> str:
@@ -237,6 +233,7 @@ def part1(input, max_gens = 6):
     game = Game3D(input)
     gens = 0
     game.print()
+    is_stable = False
     while gens < max_gens:
         gens += 1
         is_stable = not game.next_generation()
@@ -244,7 +241,8 @@ def part1(input, max_gens = 6):
         print("Active: %d" % game.count_active_cells())
         if is_stable:
             break
-    print("Stable after %d generations." % gens)
+    if is_stable:
+        print("Stable after %d generations." % gens)
     result = game.count_active_cells()
     return result
 
@@ -253,6 +251,7 @@ def part2(input, max_gens = 6):
     game = Game4D(input)
     gens = 0
     game.print()
+    is_stable = False
     while gens < max_gens:
         gens += 1
         is_stable = not game.next_generation()
@@ -260,7 +259,8 @@ def part2(input, max_gens = 6):
         print("Active: %d" % game.count_active_cells())
         if is_stable:
             break
-    print("Stable after %d generations." % gens)
+    if is_stable:
+        print("Stable after %d generations." % gens)
     result = game.count_active_cells()
     return result
 
