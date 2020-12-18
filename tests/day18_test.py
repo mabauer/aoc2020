@@ -4,7 +4,7 @@ import unittest
 import os
 import sys
 
-from day18 import Expression, part1, part2
+from day18 import Expression, Expression2, part1, part2
 from utils import read_inputfile
 
 class Day18Test(unittest.TestCase):
@@ -12,6 +12,9 @@ class Day18Test(unittest.TestCase):
     def test_tokenize(self):
         expr = Expression("1 + (3*4)")
         self.assertEqual(expr.tokens, ["1", "+", "(", "3", "*", "4", ")"])
+
+    def test_parsing_errors(self):
+        self.assertEqual(Expression("2+(").eval(), 1)
 
     def test_expressions(self):
         self.assertEqual(Expression("1").eval(), 1)
@@ -24,14 +27,18 @@ class Day18Test(unittest.TestCase):
         
 
     def test_example_expressions(self):
+        self.assertEqual(Expression("1 + (2 * 3) + (4 * (5 + 6))").eval(), 51)
         self.assertEqual(Expression("2 * 3 + (4 * 5)").eval(), 26)
         self.assertEqual(Expression("5 + (8 * 3 + 9 + 3 * 4 * 3)").eval(), 437)
         self.assertEqual(Expression("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))").eval(), 12240)
         self.assertEqual(Expression("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2").eval(), 13632)
 
-    def test_part2(self):
-        input = [""]
-        self.assertEqual(part2(input), 0)
+    def test_example_expressions_part2(self):
+        self.assertEqual(Expression2("1 + (2 * 3) + (4 * (5 + 6))").eval(), 51)
+        self.assertEqual(Expression2("2 * 3 + (4 * 5)").eval(), 46)
+        self.assertEqual(Expression2("5 + (8 * 3 + 9 + 3 * 4 * 3)").eval(), 1445)
+        self.assertEqual(Expression2("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))").eval(), 669060)
+        self.assertEqual(Expression2("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2").eval(), 23340)
 
 if __name__ == "__main__": 
     unittest.main()
