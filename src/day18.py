@@ -6,7 +6,8 @@ from typing import List
 
 from utils import read_inputfile
 
-class Expression:
+
+class ExpressionBase(object):
 
     def __init__(self, s: str):
         self.debug_s = s
@@ -35,16 +36,21 @@ class Expression:
                 pos += 1
         return tokens
 
-
-    def raise_error(self, msg: str):
-        raise ValueError(str)
-
     def next_token(self):
         if self.current < len(self.tokens):
             self.token = self.tokens[self.current]
         else:
             self.token = None
         self.current += 1
+
+    def eval_number(self) -> int:
+        assert self.token is not None
+        return int(self.token)     
+
+    def eval(self) -> int:
+        raise NotImplementedError()
+
+class Expression(ExpressionBase):
 
     def eval_expr(self) -> int:
         result = self.eval_term()        
@@ -57,12 +63,7 @@ class Expression:
                 result = result * self.eval_term()
         if self.token is not None and self.token != ")": 
             raise ValueError("Syntax error: missing +, * or )?")
-        return result
-         
-
-    def eval_number(self) -> int:
-        assert self.token is not None
-        return int(self.token)        
+        return result   
 
     def eval_term(self) -> int:
         if self.token is not None:
@@ -84,74 +85,23 @@ class Expression:
         return self.eval_expr()
 
 
-class Expression2:
-
-    def __init__(self, s: str):
-        self.debug_s = s
-        self.tokens = self.tokenize(s)
-        self.current = 0
-        self.token = None
-
-    def is_digit(self, ch: str) -> bool:
-        if ch in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]:
-            return True
-        else:
-            return False
-
-    def tokenize(self, s: str) -> List[str]:
-        tokens = []
-        pos = 0
-        while pos < len(s):
-            ch = s[pos]
-            if self.is_digit(ch):
-                token = ""
-                while pos < len(s) and self.is_digit(ch):
-                    token = token + ch
-                    pos += 1
-                    if pos < len(s):
-                        ch = s[pos]
-                tokens.append(token)
-                token = ""
-            elif ch in ["(", ")", "*", "+"]:
-                tokens.append(ch)
-                pos += 1
-            else:
-                pos += 1
-        return tokens
-
-
-    def raise_error(self, msg: str):
-        raise ValueError(str)
-
-    def next_token(self):
-        if self.current < len(self.tokens):
-            self.token = self.tokens[self.current]
-        else:
-            self.token = None
-        self.current += 1
+class Expression2(ExpressionBase):
 
     def eval_expr(self) -> int:
         result = self.eval_factor()        
         while self.token in ["*"]:
-            if self.token == "*":
-                self.next_token()
-                result = result * self.eval_factor()
+            self.next_token()
+            result = result * self.eval_factor()
+        if self.token is not None and self.token != ")": 
+            raise ValueError("Syntax error: missing +, * or )?")
         return result
-        # raise ValueError("+ or * expected")
          
     def eval_factor(self) -> int:
         result = self.eval_term()        
         while self.token in ["+"]:
-            if self.token == "+":
-                self.next_token()
-                result = result + self.eval_term()
-        return result
-
-
-    def eval_number(self) -> int:
-        if self.token is None:
-            raise ValueError("Invalid Number")
-        return int(self.token)        
+            self.next_token()
+            result = result + self.eval_term()
+        return result    
 
     def eval_term(self) -> int:
         if self.token is not None:
