@@ -6,7 +6,6 @@ from typing import List
 
 from utils import read_inputfile
 
-
 class ExpressionBase(object):
 
     def __init__(self, s: str):
@@ -16,6 +15,7 @@ class ExpressionBase(object):
         self.token = None
 
     def tokenize(self, s: str) -> List[str]:
+        s = s.replace(" ", "")
         tokens = []
         pos = 0
         while pos < len(s):
@@ -33,7 +33,7 @@ class ExpressionBase(object):
                 tokens.append(ch)
                 pos += 1
             else:
-                pos += 1
+                raise ValueError("Syntax error: illegal token")
         return tokens
 
     def next_token(self):
@@ -52,6 +52,7 @@ class ExpressionBase(object):
 
 class Expression(ExpressionBase):
 
+    # expr = term op term, op = "+" | "*"
     def eval_expr(self) -> int:
         result = self.eval_term()        
         while self.token in ["+", "*"]:
@@ -65,6 +66,7 @@ class Expression(ExpressionBase):
             raise ValueError("Syntax error: missing +, * or )?")
         return result   
 
+    # term = "(" expr ")" | number
     def eval_term(self) -> int:
         if self.token is not None:
             if self.token == "(":
@@ -87,6 +89,7 @@ class Expression(ExpressionBase):
 
 class Expression2(ExpressionBase):
 
+    # expr = factor "*" factor
     def eval_expr(self) -> int:
         result = self.eval_factor()        
         while self.token in ["*"]:
@@ -95,7 +98,8 @@ class Expression2(ExpressionBase):
         if self.token is not None and self.token != ")": 
             raise ValueError("Syntax error: missing +, * or )?")
         return result
-         
+
+    # factor = term "+" term 
     def eval_factor(self) -> int:
         result = self.eval_term()        
         while self.token in ["+"]:
@@ -103,6 +107,7 @@ class Expression2(ExpressionBase):
             result = result + self.eval_term()
         return result    
 
+    # term = "(" expr ")" | number
     def eval_term(self) -> int:
         if self.token is not None:
             if self.token == "(":
