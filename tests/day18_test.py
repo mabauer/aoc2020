@@ -17,7 +17,7 @@ class Day18Test(unittest.TestCase):
         self.assertEqual(Expression("1").eval(), 1)
         self.assertEqual(Expression("1 + 3").eval(), 4)
         self.assertEqual(Expression("1 * 3").eval(), 3)
-        # self.assertEqual(Expression("1 + 2 * 3").eval(), 9)
+        self.assertEqual(Expression("1 + 2 * 3").eval(), 9)
         self.assertEqual(Expression("(1 * 3)").eval(), 3)
         self.assertEqual(Expression("1 + (3*4)").eval(), 13)
         self.assertEqual(Expression("(3+4) * 2").eval(), 14)

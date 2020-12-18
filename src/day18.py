@@ -53,15 +53,15 @@ class Expression:
         self.current += 1
 
     def eval_expr(self) -> int:
-        left = self.eval_term()        
-        self.next_token()
-        if self.token == "+":
-            self.next_token()
-            return left + self.eval_expr()
-        if self.token == "*":
-            self.next_token()
-            return left * self.eval_expr()
-        return left
+        result = self.eval_term()        
+        while self.token in ["+", "*"]:
+            if self.token == "+":
+                self.next_token()
+                result = result + self.eval_term()
+            if self.token == "*":
+                self.next_token()
+                result = result * self.eval_term()
+        return result
         # raise ValueError("+ or * expected")
          
 
@@ -75,12 +75,14 @@ class Expression:
             if self.token == "(":
                 self.next_token()
                 result = self.eval_expr()
-                # self.next_token()
                 if self.token != ")":
                     raise ValueError(") expected")
+                self.next_token()
                 return result
             if re.match("\d+", self.token) is not None:
-                return self.eval_number()
+                result = self.eval_number()
+                self.next_token()
+                return result
         raise ValueError("( or number expected")
 
     def eval(self) -> int:
@@ -89,8 +91,11 @@ class Expression:
 
 
 def part1(input):
-    result = 0
-    return result
+    sum = 0
+    for line in input:
+        result = Expression(line).eval()
+        sum += result
+    return sum
 
 def part2(input):
     result = 0
