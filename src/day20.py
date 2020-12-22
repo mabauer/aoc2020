@@ -65,6 +65,7 @@ class Tile:
         flipped = self.cells[::-1]
         return Tile(self.id, flipped)
 
+    # Return all variants of a tile, e.g. by flipping and/or rotating it
     def get_variants(self):
         result = []
         rotated = self
@@ -75,44 +76,14 @@ class Tile:
             rotated = rotated.rotate()
         return result
 
-    def get_neighbour(self, o, tiles: Dict[int, Tile]) -> Optional[Tile]:
-        neighbours : List[int] = []
-        for t in tiles:
-            tile = tiles[t]
-            if tile.id != self.id:
-                if self.count_comon_edges(tile) > 0:
-                    neighbours.append(t)
-        # print(neighbours)   
-        result = None
-        for n in neighbours:
-            neighbour = tiles[n]
-            variants = neighbour.get_variants()
-            if o == Orientation.UP:
-                for variant in variants:
-                    if variant.get_edges()[Orientation.DOWN] == self.get_edges()[o]:
-                        result = variant
-            if o == Orientation.DOWN:
-                for variant in variants:
-                    if variant.get_edges()[Orientation.UP] == self.get_edges()[o]:
-                        result = variant
-            if o == Orientation.LEFT:
-                for variant in variants:
-                    if variant.get_edges()[Orientation.RIGHT] == self.get_edges()[o]:
-                        result = variant
-            if o == Orientation.RIGHT:
-                for variant in variants:
-                    if variant.get_edges()[Orientation.LEFT] == self.get_edges()[o]:
-                        result = variant
-        # print(result)
-        return result 
-
+    # Finds sea monsters in a tile and marks them with "O", returns the number of monsters found.
     def find_sea_monsters(self):
-        pattern1 = "([#\s]{18}#[#\s])"
-        pattern2 = "(#[#\s]{4}##[#\s]{4}##[#\s]{4}###)"
-        pattern3 = "([#\s]#[#\s]{2}#[#\s]{2}#[#\s]{2}#[#\s]{2}#[#\s]{2}#[#\s]{3})"
         monster1 = "                  O "
         monster2 = "O    OO    OO    OOO"
         monster3 = " O  O  O  O  O  O   "
+        pattern1 = "([#\s]{18}#[#\s])"
+        pattern2 = "(#[#\s]{4}##[#\s]{4}##[#\s]{4}###)"
+        pattern3 = "([#\s]#[#\s]{2}#[#\s]{2}#[#\s]{2}#[#\s]{2}#[#\s]{2}#[#\s]{3})"
         monsters = 0
         lines = [ line.replace(".", " ") for line in self.cells ]
         for i in range(1, len(lines)-1):
@@ -169,7 +140,8 @@ def parse_tiles(input) -> Dict[int, Tile]:
         tiles[no] = Tile(no, tile)
     return(tiles)
 
-
+# Finds the corners in the set of tiles -- this works because there is only one single way of
+# composing the tiles into the fiinal image
 def find_corners(tiles: Dict[int, Tile]) -> List[int]:
     corners = []
     for t1 in tiles:
@@ -185,22 +157,56 @@ def find_corners(tiles: Dict[int, Tile]) -> List[int]:
     # print(corners)
     return corners
 
+# Finds the neighbour tile for some tile, also turns/flips the neighbour in the proper orientation 
+def get_neighbour(self, direction, tiles: Dict[int, Tile]) -> Optional[Tile]:
+    neighbours : List[int] = []
+    for o in tiles:
+        other = tiles[o]
+        if other.id != self.id:
+            if self.count_comon_edges(other) > 0:
+                neighbours.append(o)
+    # print(neighbours)   
+    result = None
+    for n in neighbours:
+        neighbour = tiles[n]
+        variants = neighbour.get_variants()
+        if direction == Orientation.UP:
+            for variant in variants:
+                if variant.get_edges()[Orientation.DOWN] == self.get_edges()[direction]:
+                    result = variant
+        if direction == Orientation.DOWN:
+            for variant in variants:
+                if variant.get_edges()[Orientation.UP] == self.get_edges()[direction]:
+                    result = variant
+        if direction == Orientation.LEFT:
+            for variant in variants:
+                if variant.get_edges()[Orientation.RIGHT] == self.get_edges()[direction]:
+                    result = variant
+        if direction == Orientation.RIGHT:
+            for variant in variants:
+                if variant.get_edges()[Orientation.LEFT] == self.get_edges()[direction]:
+                    result = variant
+    # print(result)
+    return result 
 
 def compute_image(tiles: Dict[int, Tile]):
     image : List[List[Tile]]= []
+    # 1. Find the upper, left corner of the composed image
+    # The upper left corner can be any of the corners as long as is turned/flipped properly
     corners = find_corners(tiles)
     c = corners[0]
     corner = tiles[c] 
     right = None
     down = None
     for variant in corner.get_variants():
-        right = variant.get_neighbour(Orientation.RIGHT, tiles)
-        down = variant.get_neighbour(Orientation.DOWN, tiles)  
-        if right is not None and down is not None:
+        right = get_neighbour(variant, Orientation.RIGHT, tiles)
+        down = get_neighbour(variant, Orientation.DOWN, tiles)  
+        if get_neighbour(variant, Orientation.RIGHT, tiles) is not None and get_neighbour(variant, Orientation.DOWN, tiles) is not None:
             down = variant
             # print("Found left, upper corner!")
             break
     j = 0
+    # 2. Compose the final image step by step, line by line into an "array" of properly aligned tiles
     while down is not None:
         row = []
         i = 0
@@ -208,12 +214,13 @@ def compute_image(tiles: Dict[int, Tile]):
         while right is not None:
             # print("(%d, %d) = %d" % (j, i, right.id))
             row.append(right)
-            right = right.get_neighbour(Orientation.RIGHT, tiles)
+            right = get_neighbour(right, Orientation.RIGHT, tiles)
             i += 1
 
-        down = down.get_neighbour(Orientation.DOWN, tiles)
+        down = get_neighbour(down, Orientation.DOWN, tiles)
         image.append(row)
         j += 1
+    # 3. Convert the tiles into a "super" tile
     size = len(image[0][0].cells)
     lines : List[str] = []
     for y in image:
