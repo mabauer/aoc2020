@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
 import unittest
-import os
-import sys
 
-from day23 import CupGame, part1, part2
-from utils import read_inputfile
+from day23 import CupGame, MillionCupGame, MILLION
 
 class Day23Test(unittest.TestCase):
 
@@ -17,31 +14,39 @@ class Day23Test(unittest.TestCase):
         game.rotate(5)
         self.assertEqual(game.get_labeling(), "891234567")
 
-    def test_part1_move(self):
+    def test_cupgame_move(self):
         input = "389125467"
         game = CupGame(input)
         game.make_move()
         self.assertEqual(game.get_labeling(), "328915467")
         
-    def test_part1_10moves(self):
+    def test_cupgame_10moves(self):
         input = "389125467"
         game = CupGame(input)
         for i in range(0, 10):
             game.make_move()
-        #self.assertEqual(game.get_labeling(), "583741926")
         self.assertEqual(game.get_labeling(1), "192658374")
 
-    def test_part1(self):
+    def test_part1_on_example(self):
         input = "389125467"
         game = CupGame(input)
         for i in range(0, 100):
             game.make_move()
-        #self.assertEqual(game.get_labeling(), "583741926")
         self.assertEqual(game.get_labeling(1), "167384529")
 
-    def test_part2(self):
-        input = [""]
-        self.assertEqual(part2(input), 0)
+    def test_millioncupgame_part1_on_example(self):
+        input = "389125467"
+        game = MillionCupGame(input)
+        for i in range(0, 100):
+            game.make_move()
+        self.assertEqual(game.get_labeling(1), "167384529")
+
+    def test_millioncupgame_part2_on_example(self):
+        input = "389125467"
+        game = MillionCupGame(input, MILLION)
+        for i in range(0, 10*MILLION):
+            game.make_move()
+        self.assertEqual(game.get_cups_with_stars(), (934001, 159792))
 
 if __name__ == "__main__": 
     unittest.main()

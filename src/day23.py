@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 
-import re
-import os
-import sys
+from typing import Dict, List, Tuple
 
-# from utils import read_inputfile
-from typing import List, Sized
-
+MILLION = 1000000 
 class CupGame:
 
     def __init__(self, s : str):
@@ -64,7 +60,7 @@ class CupGame:
     def print_move(self, picks : List[int], destination: int):
         print("-- move %d --" % self.move)
         print("cups: ", end="")
-        for i in range(0, len(self.cups)):
+        for i in range(0, self.size):
             if i != self.current_position:
                 print(" %d " % self.cups[i], end="")
             else:
@@ -88,17 +84,85 @@ class CupGame:
         labels = [ str(self.cups[i % self.size]) for i in range(pos, pos + self.size) ]
         return "".join(labels)
 
+class MillionCupGame:
+
+    def __init__(self, s : str, limit: int = 0):
+
+        if limit == 0:
+            limit = len(s)
+            values = [ int(c) for c in s ]
+        else:
+            values = [ int(c) for c in s ] + [ i for i in range(len(s)+1, limit+1)]
+        self.limit = len(values)
+        self.next_cup : Dict[int, int] = {}
+        for i in range(0, len(values)-1):
+            self.next_cup[values[i]] = values[i+1]
+        self.next_cup[values[len(values)-1]] = values[0]
+        self.current = values[0]
+
+    def print_cups(self):
+        cup = self.current
+        cups = []
+        cups.append(cup)
+        for _ in range(self.limit-1):
+            cup = self.next_cup[cup]
+            cups.append(cup)
+        print(", ".join(str(v) for v in cups))
+
+    def make_move(self):
+        pickup1 = self.next_cup[self.current]
+        pickup2 = self.next_cup[pickup1]
+        pickup3 = self.next_cup[pickup2]
+
+        if self.current > 1:
+            destination = self.current - 1
+        else:
+            destination = self.limit
+        while destination in [pickup1, pickup2, pickup3]:
+            if destination > 1:
+                destination -= 1
+            else:
+                destination = self.limit
+        # self.print_cups()
+        self.next_cup[self.current] = self.next_cup[pickup3]
+        self.next_cup[pickup3] = self.next_cup[destination]
+        self.next_cup[destination] = pickup1
+        self.current = self.next_cup[self.current]
+
+    def get_labeling(self, start = 1):
+        cups = []
+        cup = start
+        cups.append(cup)
+        for _ in range(0, self.limit-1):
+            cup = self.next_cup[cup]
+            cups.append(cup)
+        return "".join(str(v) for v in cups)
+
+    def get_cups_with_stars(self) -> Tuple[int, int]:
+        cups = []
+        cup = 1
+        cups.append(cup)
+        for _ in range(0, 2):
+            cup = self.next_cup[cup]
+            cups.append(cup)
+        return (cups[1], cups[2])
+
+
 
 def part1(input):
-    game = CupGame(input)
+    game = MillionCupGame(input)
     for i in range(0, 100):
         game.make_move()
     result = game.get_labeling(1)[1:]
     return result
 
 def part2(input):
-    result = 0
-    return result
+    game = MillionCupGame(input, MILLION)
+    for i in range(0, 10*MILLION):
+        game.make_move()
+    result = game.get_cups_with_stars()
+    # print(result)
+    return int(result[0]) * int(result[1])
 
 def main():    
 
