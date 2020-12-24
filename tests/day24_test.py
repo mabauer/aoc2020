@@ -21,8 +21,8 @@ class Day24Test(unittest.TestCase):
         self.assertEqual(part1(input), 10)
 
     def test_part2(self):
-        input = [""]
-        self.assertEqual(part2(input), 0)
+        input = read_inputfile("example24.txt")
+        self.assertEqual(part2(input), 2208)
 
 if __name__ == "__main__": 
     unittest.main()
