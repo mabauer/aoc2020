@@ -124,6 +124,7 @@ class MillionCupGame:
             else:
                 destination = self.limit
         # self.print_cups()
+        # Remove the three "pickup" cups and insert them just before destination
         self.next_cup[self.current] = self.next_cup[pickup3]
         self.next_cup[pickup3] = self.next_cup[destination]
         self.next_cup[destination] = pickup1

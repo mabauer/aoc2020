@@ -38,9 +38,5 @@ class Day19Test(unittest.TestCase):
         input = read_inputfile("example19b.txt")
         self.assertEqual(part1(input), 2)
 
-    def test_part2(self):
-        input = [""]
-        self.assertEqual(part2(input), 0)
-
 if __name__ == "__main__": 
     unittest.main()

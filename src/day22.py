@@ -99,6 +99,7 @@ class RecursiveGame(Game):
         if card1 <= len(self.deck_player1) and card2 <= len(self.deck_player2):
             if self.debug:
                 print("Playing a sub-game to determine the winner...")
+            # Note that only the first few cards in the decks form the decks for the sub-game!!
             subgame = RecursiveGame([self.deck_player1[:card1].copy(), self.deck_player2[:card2].copy()]) 
             winner = subgame.play()
             if self.debug:
