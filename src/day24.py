@@ -19,24 +19,23 @@ dirs = {
 
 def compute_tile(s : str) -> Tuple[int, int]:
     i = 0
-    dir = ""
-    path = []
+    token = ""
     tokens = []
     # print(s)
     while i < len(s):
-        c = s[i]
-        if c in ["e", "w"]:
-            dir = dir + c
-            tokens.append(dir)
-            path.append(dirs[dir])
-            dir = ""
-        if c in ["n", "s"]:
-            dir = c
+        ch = s[i]
+        if ch in ["e", "w"]:
+            token = token + ch
+            tokens.append(token)
+            token = ""
+        if ch in ["n", "s"]:
+            token = ch
         i += 1
     (x, y) = (0, 0)
     # print("%d, %d" % (x, y))
     i = 0
-    for (dx, dy) in path:
+    for token in tokens:
+        (dx, dy) = dirs[token]
         (x, y) = (x + dx, y + dy)
         # print("%s: %d, %d" % (tokens[i], x, y))
         i += 1
@@ -64,10 +63,12 @@ class LivingArt:
 
     def __init__(self, black_tiles: Set[Tuple[int, int]]):
         self.black_tiles = black_tiles
-        self.x_min = min([ x for (x, _) in self.black_tiles ])
-        self.x_max = max([ x for (x, _) in self.black_tiles ])
-        self.y_min = min([ y for (_, y) in self.black_tiles ])
-        self.y_max = max([ y for (_, y) in self.black_tiles ])
+        xs = [ x for (x, _) in self.black_tiles ]
+        ys = [ y for (_, y) in self.black_tiles ]
+        self.x_min = min(xs)
+        self.x_max = max(xs)
+        self.y_min = min(ys)
+        self.y_max = max(ys)
 
     
     # Compute a new generation according to the rules of part 1
@@ -139,11 +140,10 @@ def part2(input, max_days = 100):
 
 def main():    
 
-    # Official input
     input = read_inputfile("input24.txt")
 
-    print("The solution for part 1 on the official input is %d" % (part1(input)))
-    print("The solution for part 2 on the official input is %d" % (part2(input)))
+    print("The solution for part 1 is %d" % (part1(input)))
+    print("The solution for part 2 is %d" % (part2(input)))
 
 if __name__ == "__main__": 
     main()
