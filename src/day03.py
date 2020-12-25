@@ -23,38 +23,22 @@ def count_trees(map, right, down):
     return count
 
 # Apply different strategies and multiply the results
-def part_two(map, strategies):
+def part2(map, strategies):
     results = [ count_trees(map, right, down) for (right, down) in strategies]
     multiply = lambda x, y: x * y
     result = reduce(multiply, results)
     return result
 
 def main():
-    # Example
-    input1 = [
-        "..##.......", 
-        "#...#...#..", 
-        ".#....#..#.", 
-        "..#.#...#.#", 
-        ".#...##..#.", 
-        "..#.##.....", 
-        ".#.#.#....#", 
-        ".#........#", 
-        "#.##...#...", 
-        "#...##....#", 
-        ".#..#...#.#"]
 
-    # Official input
-    input2 = read_inputfile("input03.txt")
+    input = read_inputfile("input03.txt")
 
-    print("The trajectory for the example data encounters %d trees" % (count_trees(input1, 3, 1)))
-    print("The trajectory for the official input encounters %d trees" % (count_trees(input2, 3, 1)))
+    print("The trajectory encounters %d trees" % count_trees(input, 3, 1))
 
     # Predefined trajectory strategies for part two
     trajectory_strategies = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
 
-    print("The solution for part two on the example data is %d" % (part_two(input1, trajectory_strategies)))
-    print("The solution for part two on the official data is %d" % (part_two(input2, trajectory_strategies)))
+    print("The solution for part is %d" % part2(input, trajectory_strategies))
 
 if __name__ == "__main__": 
     main()
